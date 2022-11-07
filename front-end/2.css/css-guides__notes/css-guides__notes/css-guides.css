@@ -1,0 +1,129 @@
+*, *::after, *::before {
+    box-sizing: border-box;
+
+/* font families */
+    --ff-heading: 'Nunito Sans', sans-serif;
+    --ff-body: 'Raleway', sans-serif; 
+
+/* Colors */
+    --clr-dark: 265, 23%, 33%;
+    --clr-dark-light: 266, 17%, 52%;
+    --clr-light: 289, 100%, 96%;
+    --clr-lighter: 289, 38%, 94%;
+    --clr-accent: 170, 100%, 39%;
+
+/* weights */
+    --fw-reg: 400;
+    --fw-bold: 700;
+}
+
+/* DEFAULT */
+
+/* TYPOGRAPHY */
+body {
+    font-family: var(--ff-body);
+    background-color: hsl(var(--clr-light));
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--ff-heading);
+    color: hsl(var(--clr-dark));
+
+    text-align: center;
+    text-transform: capitalize;
+}
+
+h4 {
+    text-align: left;
+}
+
+.bold {
+    font-weight: var(--fw-bold);
+}
+
+p, li {
+    color: hsl(var(--clr-dark-light));
+}
+
+p {
+    margin-block: 0;
+}
+
+li {
+    list-style-type: square;
+}
+
+li.header {
+    list-style-type: none;
+    font-weight: var(--fw-bold);
+}
+
+li.description {
+    list-style-type: none;
+}
+
+.nested {
+    list-style-type: circle;
+}
+
+/* TEMPLATES */
+
+span {
+    background-color: hsl(var(--clr-accent), 0.5);
+}
+
+.container {
+    border-width: 2px;
+    border-style: solid;
+    border-color: hsl(var(--clr-dark));
+
+    margin-bottom: 1rem;
+}
+
+.values {
+    background-color: hsl(var( --clr-lighter));
+}
+
+.span-value {
+    background-color: hsl(var( --clr-lighter));
+}
+
+/* Flex Layout */
+
+.flex-container {
+    display: flex;
+    gap: 2rem;
+}
+
+.flex-header {
+    justify-content: center;
+}
+
+/* Table Layout */
+
+table {
+    background-color: hsl(var( --clr-lighter));
+    color: hsl(var(--clr-dark-light));
+    padding-inline: 2rem;
+    margin: 0 auto;
+}
+
+td {
+    margin-left: 4rem;
+}
+
+/* Grid layout */
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    grid-template-rows: auto;
+    grid-template-areas: "header description";
+    row-gap: 0.4em;
+
+
+    background-color: hsl(var( --clr-lighter));
+    width: 80%;
+    margin: 1em auto;
+
+}
