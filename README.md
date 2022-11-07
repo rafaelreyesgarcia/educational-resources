@@ -2,7 +2,7 @@
 
 Here's a collection of resources I've used to learn web development. 
 
-There's different branches for each category of concepts
+There's a different folder for each main category.
 
 - front-end
 - back-end
