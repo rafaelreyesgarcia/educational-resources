@@ -2,7 +2,7 @@
 
 Here's a collection of resources I've used to learn web development. 
 
-There's a different folder for each main category.
+I divided the resources in 5 main categories: 
 
 - front-end
 - back-end
@@ -10,4 +10,4 @@ There's a different folder for each main category.
 - databases
 - computer science
 
-
+Each category includes the material I read to learn, as well as toy projects that I built using that knowledge. 
