@@ -296,3 +296,38 @@ function confirmEndingAlt(str, target) {
 }
 
 console.log(confirmEndingAlt("bastian", "n"));
+
+// repeat a string 
+
+// solution 1 iteration
+
+function repeatStringNumTimes(str, num) {
+
+  let result = '';
+
+  for (let i = 0; i < num; i++) {
+    result += str;
+  };
+
+  return result;
+}
+
+console.log(repeatStringNumTimes('abc', 3));
+
+// solution 2 recursion
+
+function repeatStringNumTimesRecursive(str, num) {
+  if (num < 1) {
+    return "";
+  } else {
+    return str + repeatStringNumTimes(str, num - 1);
+  }
+}
+
+// solution 3 recursion ternary instead of if 
+
+function repeatStringNumTimesRecursiveOpt(str, num) {
+  return num > 0 ? str + repeatStringNumTimes(str, num - 1) : "";
+}
+
+
