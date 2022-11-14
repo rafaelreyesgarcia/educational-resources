@@ -106,6 +106,98 @@ function updateGreeting() {
 }
 ```
 
+### **managing state within a component**
+
+valid useState hook invocation and destructuring
+
+```jsx
+const [car, setCar] = useState({color: 'blue', mileage: 0})
+```
+
+updating a single property of a state object
+
+```jsx
+const [person, setPerson] = useState({ name:'rafael', age:29})
+
+setPerson(prev => { ...prev, age:22 });
+```
+
+### **what are side effects?**
+
+side effects within a react component.
+
+pure and impure functions
+
+useEffect is used to produce side effects within functional components.
+
+a side effect is something that makes a function impure
+
+**pure functions**  
+should receive specific input
+
+```jsx
+function EstablishedYear(props) {
+  return <h1>Established Year: {props.year}</h1>
+}
+
+function App() {
+  return <EstablishedYear year={2003} />
+}
+
+export default App;
+```
+
+**impure functions**  
+performs a side effect  
+invokes browser APIs (console, fetch, etc)
+
+```jsx
+function ShoppingCart(props) {
+  const total = props.count * props.price;
+  console.log(total);
+  return <h1> Total: {total} </h1>
+}
+
+export default function App() {
+  return (
+    <ShoppingCart items={5} pricePerItem={10} />
+  );
+}
+```
+
+the trick is to contain impure functions inside their own special areas. (useEffect)
+
+**useEffect example**   
+
+```jsx
+import { useEffect } from 'react';
+
+function ShoppingCart(props) {
+  const total = props.count * props.price;
+
+  /* 
+  use effect has two parameters
+
+  callback function
+  common to use an arrow function
+
+  array
+  the array can be kept valid
+  */
+
+  useEffect(function () {
+    console.log(total);
+  }, []);
+
+  // useEffect(() => console.log(total), []);
+
+  return <h1>total: {total}</h1>
+}
+```
+
+
+
+
 
 
 
