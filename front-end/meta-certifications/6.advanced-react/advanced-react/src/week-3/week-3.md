@@ -457,4 +457,244 @@ const element = <Component title='cake' {...props} cal={500} />;
 
 ## **REUSING BEHAVIOR**
 
+### **cross-cutting concerns in react**
+
+generic business logic not related to a certain app can be reused when its needed.
+
+- permission roles
+- handling errors 
+- logging
+
+cross-cutting concerns deals with this generic business logic.
+
+components are not always suitable for this kind of logic.
+
+live orders list
+
+```jsx
+function LiveOrdersList() {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const handleNewOrders = () => {
+      const newOrders = Data.Source.getOrders();
+      setOrders(newOrders);
+    }
+    DataSource.addListener(handleNewOrders)
+
+    return () => {
+      DataSource.removeListener(handleNewOrders);
+    };
+  }, []);
+
+  return <LiveOrders orders={orders} />
+}
+
+```
+
+newsletter list
+
+```jsx
+function NewsletterList() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const handleNewUsers = () => {
+      const newUsers = DataSource.getSubscribers();
+      setUsers(newUsers)
+    }
+    
+    DataSource.addListener(handleNewUsers);
+    
+    return () => {
+      Data.Source.removeListener(handleNewUsers);
+    };
+  }, []);
+
+  return <UserList users={users} />
+}
+```
+
+suscribing to data source and setting local state with new data is an ocurring pattern.
+
+**high-order components**  
+
+`const EnhancedComponent = higherOrderComponent(WrappedComponent);`
+
+function that takes a component and returns a new component.
+
+a component transforms props into UI
+
+a higher-order component transforms a component into another component, enhances and extends capabilities of the given component.
+
+**HOC implementation**
+
+```jsx
+const withSubscription = (WrappedComponent, selectData) => {
+  return (props) => {
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+      const handleChange = () => {
+        const newData = selectData(DataSource, props);
+        setData(newData)
+      }
+
+      DataSource.addListener(handleChange)
+
+      return () => {
+        DataSource.removeListener(handleChange)
+      };
+    }, []);
+
+    return <WrappedComponent data={data} {...props} />
+  }
+}
+```
+
+benefits of using HOC in a solution
+
+- define logic in a single place, share it across components and keep them unchanged and stateless.
+
+- enhances or extends capabilities of the given component.
+
+**HOC usage**
+
+```jsx
+const LiveOrdersListWithSubscription = withSubscription(
+  LiveOrders,
+  () => DataSource.getOrders()
+);
+
+const UsersSubscribeWithSubscription = withSubscription(
+  UserList,
+  () => DataSource.getSubscribers()
+);
+```
+
+### **higher-order components**
+
+**don't mutate the original component**
+
+turn the HOC into a pure function that doesn't alter the argument it receives and always return a new component
+
+```jsx
+const HOC = (WrappedComponent) => {
+  // this would mutate the original component
+  WrappedComponent = () => {
+
+  };
+}
+```
+
+**should pass unrelated props through to the wrapped component**
+
+HOCs should spread and pass through all the props unrelated to their concern.
+
+```jsx
+const withMousePosition = (WrappedComponent) => {
+  const injectedProp = {mousePosition: {x: 10, y:10}};
+
+  return (originalProps) => {
+    return <WrappedComponent injectedProp={injectedProp} {...originalProps} />;
+  };
+};
+```
+
+**maximize composability**
+
+sometimes HOCs can accept additional arguments that act as extra configuration determining type of enhancement
+
+```jsx
+const EnhancedComponent = HOC(WrappedComponent, config)
+
+```
+
+> HOCs use **currying**, a functional programming pattern to maximize function composition
+
+```jsx
+const EnhancedComponent = connect(selector, actions)(WrappedComponent);
+
+const HOC = connect(selector, actions);
+const EhancedComponent = HOC(WrappedComponent);
+
+// connect is a function that returns a HOC 
+```
+
+functions whose output type is the same as its input type `Component => Component` are easy to compose
+
+```jsx
+const enhance = compose(
+  withMousePosition,
+  withURULLocation,
+  connect(selector)
+);
+
+const EnhancedComponent = enhance(WrappedComponent);
+```
+
+**caveats**
+
+- don't use HOCS inside other components, this forces React to remount it instead of just updating it, the comonent and its children would lose their previous state.
+
+- refs aren't passed through.  
+refs are not props.  
+React.forwardRef can solve the issue where the ref refers to an instance of the outermost container component, not the wrapped component.
+
+### **render props**
+
+powerful technique to reuse common code.
+
+use a prop called render with an attribute its a function
+
+take functions that return react elements and call them inside their render logic
+
+```jsx
+<MealProvider render={data => {
+  <p>Ingredients: {data.ingredients}</p>
+}}>
+```
+
+the new props are injected dynamicallyas the new parameter of the function
+
+### self-review: render props and HOCs
+
+1. `return render({mousePosition});`
+2. 
+```jsx
+return ( 
+  <MousePosition 
+    render={({mousePosition}) => (
+      <p>
+        ({mousePosition.x}, {mousePosition.y})
+      </p>
+    )}
+  />
+);
+```
+3. the app component shouldn't be altered.
+
+### knowledge check: reusing behavior
+
+1. cross-cutting data in react applications are difficult to address using a custom hook because:
+- you would have to alter the implementation of each component that needs the specific data.
+- turns a stateless component into a stateful one/
+
+2. not valid signature that doesn't follow the convention of HOCs
+`withSubscription(() => getData(), Component)`
+
+3. best practices when implementing HOCs
+- passed unrelated props through to the Wrapped Component.
+- maximize composability.
+
+4. differences between HOCs and render props
+- they inject new props in the component to be enhanced in a different way
+- render props provide the new data as a function parameter.
+- HOcs get the new data as a new prop.
+
+5. a component with a render prop as renderer can do anything a HOC can do
+
+
+
+
 ## **INTEGRATION TESTING**

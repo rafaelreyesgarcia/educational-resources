@@ -47,3 +47,7 @@
 - [compound components with hooks](https://kentcdodds.com/blog/compound-components-with-react-hooks)
 - [react docs - fragments](https://reactjs.org/docs/fragments.html)
 
+- [downshift](https://github.com/downshift-js/downshift)
+- [react docs - render props](https://reactjs.org/docs/render-props.html)
+- [react docs - higher order components](https://reactjs.org/docs/higher-order-components.html)
+- [react docs - forwarding refs](https://reactjs.org/docs/forwarding-refs.html#forwarding-refs-in-higher-order-components)
