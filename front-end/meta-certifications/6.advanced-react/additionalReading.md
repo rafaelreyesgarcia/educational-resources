@@ -40,3 +40,10 @@
 - [react docs - syntax and usage of useReducer](https://beta.reactjs.org/apis/react/useReducer#usereducer)
 - [react docs - using useRef hook](https://beta.reactjs.org/apis/react/useRef#useref)
 - [ react docs - reusing logic with custom hooks](https://beta.reactjs.org/learn/reusing-logic-with-custom-hooks)
+
+## week 3
+
+- [chakra UI](https://chakra-ui.com/)
+- [compound components with hooks](https://kentcdodds.com/blog/compound-components-with-react-hooks)
+- [react docs - fragments](https://reactjs.org/docs/fragments.html)
+
