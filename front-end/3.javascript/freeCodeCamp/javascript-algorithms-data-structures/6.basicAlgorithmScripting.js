@@ -330,4 +330,144 @@ function repeatStringNumTimesRecursiveOpt(str, num) {
   return num > 0 ? str + repeatStringNumTimes(str, num - 1) : "";
 }
 
+// truncate a string
+
+// solution 1
+function truncateString(str, num) {
+  let truncated = str.slice(0, num);
+  return ((str.length > num) 
+    ? `${truncated}...` 
+    : str
+  );
+}
+
+let aString = 'a-tisket a-tasket a green and yellow basket';
+console.log(aString.length);
+
+console.log(truncateString(aString, 8));
+
+// finders keepers
+
+// solution 1
+
+function findElement(arr, func) {
+  
+  let num = 0;
+
+  for (let i = 0; i < arr.length; i++) {
+    num = arr[i];
+    if (func(num)) {
+      return num;
+    }
+  }
+
+  return undefined;
+}
+
+console.log(findElement([1, 2, 3, 4], num => num % 2 === 0));
+
+console.log(1 % 2 === 0);
+
+// solution 2
+
+function findElement2(arr, func) {
+  return arr.find(func);
+}
+
+console.log(findElement2([1, 2, 3, 4], num => num % 2 === 0));
+
+// solution 3
+function findElement3(arr, func) {
+  // indexOf returns the index of the first number that meets the condition in func
+  // that index is used to do a value look-up on the given arr
+
+  return arr[arr.map(func).indexOf(true)];
+}
+
+// solution 4 - recursive
+function findElementRecursive(arr, func) {
+  if (arr.length > 0 && !func(arr[0])) {
+    return findElementRecursive(arr.slice(1), func);
+  } else {
+    return arr[0];
+  }
+}
+
+// boo who
+
+// own solution
+
+function booWhoo(bool) {
+  return typeof bool === 'boolean';
+}
+
+console.log(booWhoo(true));
+console.log(typeof true);
+
+// title case a sentence
+
+// solution 1
+function titleCase(str) {
+  const newTitle = str.split(' ');
+  const updatedTitle = [];
+
+  for (let st in newTitle) {
+    updatedTitle[st] = newTitle[st][0].toUpperCase() + newTitle[st].slice(1).toLowerCase();
+  }
+
+  return updatedTitle.join(" ");
+}
+
+let titleCaseString = 'I\'m a little tea pot';
+console.log(titleCase(titleCaseString));
+
+// solution 2
+
+function titleCase2(str) {
+  return str  
+    .toLowerCase()
+    .split(' ')
+    .map(elem => elem.replace(elem.charAt(0), elem.charAt(0).toUpperCase()))
+    .join(" ");
+}
+
+console.log(titleCase2(titleCaseString));
+
+// solution 3
+
+function titleCase3(str) {
+  return str
+    .toLowerCase()
+    .replace(/(^|\s)\S/g, letter => letter.toUpperCase());
+    /* 
+    regexp
+    \S finds all non-whitespace characters
+    ^ carat defines that the beginning of the string
+    | or 
+    \s after any whitespace character
+    
+    works with international and accented characters
+    */
+}
+
+console.log(titleCase3(titleCaseString));
+
+// slice and splice
+
+// solution 1
+
+function frankenSplice(arr1, arr2, n) {
+  // let franken = [...arr2];
+  let franken = arr2.slice();
+  franken.splice(n, 0, ...arr1);
+  franken.sort((a, b) => a - b);
+
+  return franken;
+}
+
+console.log(frankenSplice([1, 2, 3], [4, 5, 6], 1));
+
+
+
+
 
