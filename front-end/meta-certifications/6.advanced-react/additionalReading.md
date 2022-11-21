@@ -51,3 +51,8 @@
 - [react docs - render props](https://reactjs.org/docs/render-props.html)
 - [react docs - higher order components](https://reactjs.org/docs/higher-order-components.html)
 - [react docs - forwarding refs](https://reactjs.org/docs/forwarding-refs.html#forwarding-refs-in-higher-order-components)
+
+- [react testing library](https://testing-library.com/docs/react-testing-library/intro/)
+- [jest documentation](https://jestjs.io/docs/getting-started)
+- [continuous delivery](https://www.atlassian.com/continuous-delivery/principles/continuous-integration-vs-delivery-vs-deployment)
+- [practical test pyramid](https://martinfowler.com/articles/practical-test-pyramid.html)

@@ -454,20 +454,322 @@ console.log(titleCase3(titleCaseString));
 
 // slice and splice
 
-// solution 1
+// own solution
 
 function frankenSplice(arr1, arr2, n) {
   // let franken = [...arr2];
   let franken = arr2.slice();
+
   franken.splice(n, 0, ...arr1);
-  franken.sort((a, b) => a - b);
+  // franken.sort((a, b) => a - b);
 
   return franken;
 }
 
 console.log(frankenSplice([1, 2, 3], [4, 5, 6], 1));
 
+// solution 1
 
+function frankenSplice1(arr1, arr2, n) {
+  let localArray = arr2.slice();
 
+  for (let i = 0; i < arr1.length; i++) {
+    localArray.splice(n, 0, arr1[i]);
+    n++;
+  }
 
+  return localArray;
+}
+
+// solution 2
+
+function frankenSplice2(arr1, arr2, n) {
+  let localArr = arr2.slice();
+
+  localArr.splice(n, 0, ...arr1);
+  
+  return localArr;
+}
+
+// solution 3
+
+function frankenSplice3(arr1, arr2, n) {
+  return [...arr2.slice(0, n), ...arr1, ...arr2.slice(n)];
+}
+
+// falsy bouncer
+
+/* 
+falsy values
+false, null, 0, "", undefined, NaN
+*/
+
+// own solution (1) 
+
+function bouncer(arr) {
+  let newArray = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    // if (!!arr[i])
+    if (arr[i]) {
+      newArray.push(arr[i]);
+    }
+  }
+
+  return newArray;
+}
+
+console.log(bouncer([7, 'ate', '', false, 9]));
+
+// solution 2
+
+function bouncer2(arr) {
+  return arr.filter(Boolean);
+  /* 
+  filter will invoke a callback function for each element in the array
+  will return a new array with elements that pass a check
+  this check is evaluated in the callback
+  the callback performs Boolean wrapper in each element, which will convert the value to a boolean type
+  */
+}
+
+// where do I belong
+
+// own solution 
+function getIndexToIns(arr, num) {
+  arr.push(num);
+  arr.sort((a, b) => a - b);
+  return arr.indexOf(num);
+}
+
+console.log(getIndexToIns([10, 20, 30, 40, 50], 35));
+
+// solution 1 iterative
+
+function getIndexToIns1(arr, num) {
+  arr.sort((a, b) => a - b);
+
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] >= num) return i;
+  }
+
+  return arr.length;
+}
+
+// solution 2 
+
+function getIndexToIns2(arr, num) {
+  console.log(arr.filter(val => num > val));
+  return arr.filter(val => num > val).length;
+}
+
+console.log(getIndexToIns2([10, 20, 30, 40, 50], 35));
+
+/* 
+35 > 10 true
+35 > 20 true
+35 > 30 true
+
+35 > 40 false
+35 > 50 false
+these two elements are filtered out
+
+.length will get the length of the array, which would be the index number where num would be pushed into
+
+this solution doesn't actually modify the input array
+
+*/
+
+// solution 3
+
+function getIndexToIns3(arr, num) {
+  let index = arr
+    // sorts the array in ascending order
+    .sort((curr, next) => curr - next)
+
+    // returns the first index that satisfies the provided testing function
+    // once 35 is <= than the current element in the findIndex iteration
+    // the index is returned
+    .findIndex(currNum => num <= currNum);
+  
+  return index === -1 ? arr.length : index;
+}
+
+console.log(getIndexToIns3([10, 20, 30, 40, 50], 35));
+
+// solution 4
+
+function getIndexToIns4(arr, num) {
+  return arr
+    .concat(num)
+    .sort((a, b) => a - b)
+    .indexOf(num);
+}
+
+// mutations
+
+// solution 1
+
+function mutation(arr) {
+  const test = arr[1].toLowerCase();
+  const target = arr[0].toLowerCase();
+
+  for (let i = 0; i < test.length; i++) {
+    if (target.indexOf(test[i]) < 0) return false;
+  }
+
+  return true;
+
+}
+
+console.log(mutation(['Hello', 'hey']));
+
+// solution 2
+function mutation2(arr) {
+  return arr[1]
+    .toLowerCase()
+    .split("")
+    .every(function(letter) {
+      return arr[0].toLowerCase().indexOf(letter) !== -1;
+    });
+}
+
+console.log(mutation2(['Hello', 'hey']));
+// let array = ['Hello', 'hey'];
+// console.log(array[1].toLowerCase().split('').every(function(letter) {
+//   return array[0].toLowerCase().indexOf(letter) !== -1;
+// }));
+
+// solution 3
+
+function mutation3([target, test], i = 0) {
+  target = target.toLowerCase();
+  test = test.toLowerCase();
+
+  return i >= test.length
+    ? true
+    : !target.includes(test[i])
+      ? false
+      : mutation3([target, test], i + 1);
+}
+
+/* 
+recursive process
+mutation3(['Hello', 'hey']);
+
+target = 'Hello'.toLowerCase();
+test = 'hey'.toLowerCase();
+
+return 
+
+0 >= 3 false so ? true doesn't execute
+
+!'hello'.includes('hey'[0]) is true but ! makes it false so ? false doesn't execute
+
+: mutation3() is called recursively
+
+  RECURSIVE CALL
+  process happens again but this time i is 1
+
+  return 1 >= 3 false so ? true doesn't execute
+
+  !'hello'.includes('hey'[0]) is true but ! makes it false so ? false doesn't execute
+
+  : mutation3() is called recursively
+
+    RECURSIVE CALL
+    process happens again but this time i is 2
+
+    returns 2 >= 3 false so ? true doesn't execute
+
+    !'hello'.includes('hey'[2]) is false so ! inverts it to true so ? false executes
+    
+  recursion stops, this call returns false
+recursion stops, this call returns false
+
+nested ternaries are not typically recommended in professional code
+*/
+
+// chunk monkey
+
+function chunkArrayInGroups(arr, size) {
+  let temp = [];
+  const result = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    if (i % size !== size - 1) {
+      temp.push(arr[i]);
+    } else {
+      temp.push(arr[i]);
+      result.push(temp);
+      temp = [];
+    }
+  }
+
+  if (temp.length !== 0) result.push(temp);;
+  
+  return result;
+}
+
+console.log(chunkArrayInGroups(['a', 'b', 'c', 'd'], 2));
+
+// solution 2 
+
+function chunkArrayInGroups2(arr, size) {
+  const newArray = [];
+
+  for (let i = 0; i < arr.length; i += size) {
+    newArray.push(arr.slice(i, i + size));
+  }
+
+  return newArray;
+}
+
+console.log(chunkArrayInGroups2(['a', 'b', 'c', 'd'], 2));
+
+// solution 3
+
+function chunkArrayInGroups3(arr, size) {
+
+  const newArray = [];
+
+  let i = 0;
+
+  while (i < arr.length) {
+    newArray.push(arr.slice(i, i + size));
+    i += size;
+  }
+
+  return newArray;
+}
+
+console.log(chunkArrayInGroups3(['a', 'b', 'c', 'd'], 2));
+
+// solution 4
+
+function chunkArrayInGroups4(arr, size) {
+  const newArray = [];
+
+  while (arr.length > 0) {
+    newArray.push(arr.splice(0, size));
+  }
+
+  return newArray;
+}
+
+console.log(chunkArrayInGroups4(['a', 'b', 'c', 'd'], 2));
+
+// solution 5 recursive
+
+function chunkArrayInGroups5(arr, size) {
+  if (arr.length <= size) {
+    return [arr];
+  } else {
+    return [arr.slice(0, size)].concat(
+      chunkArrayInGroups5(arr.slice(size), size)
+    );
+  }
+}
+
+console.log(chunkArrayInGroups5(['a', 'b', 'c', 'd'], 2));
 

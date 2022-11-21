@@ -695,6 +695,328 @@ return (
 5. a component with a render prop as renderer can do anything a HOC can do
 
 
-
-
 ## **INTEGRATION TESTING**
+
+### **why react testing library**
+
+manual testing is time consuming, tedious and error prone as the app grows in complexity.
+
+- testing importance
+- testing best practices
+- introduction to jest and react testing library
+- example of component testing
+
+**testing importance**  
+- involves discovering bugs or errors before deploying an app.
+- ensures software quality
+- saves time and money
+
+**testing best practices**  
+- avoid including implementation details
+- test should work with real DOM nodes.
+- resemble software usage
+- maintainability 
+
+**jest**  
+- javascript test runner
+- lets you access an artificial DOM called JSDOM 
+- jest provides good iteration speed 
+- provide mocking modules
+
+mocking refers to an imitation.  
+enables you to replace complex functions with other simpler ones that simulate the same behavior.  
+mocking can be used to make sure unit testing is standalone.
+
+**react testing library**  
+set of utilities that fulfils testing best practices without relying on component implementation details
+
+**App.test.js**  
+
+import both render and screen from react testing library
+
+render function is used to render the component to test and perform assertions against.
+
+react testing library exports the screen object, a reference to document.body, it has every query prebound to it.
+
+**test global function**  
+
+text description is first argument
+
+second argument is a function to compose all the steps a test needs to go through
+
+**test steps**
+
+1. render app component in artificial DOM environment
+
+```jsx
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+test('render react App component in artificial DOM', () => {
+  render(<App />);
+});
+```
+
+2. screen object is used to create a query against document.body. `getByText` utility asks the document body tag if it can find an element inside with a string called little lemon restaurant. if there isn't one, it returns null.
+
+```jsx
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+test('render react App component, query element containing little lemon restaurant string', () => {
+  render(<App />);
+  const linkElement = screen.getByText(/little lemon restaurant/i);
+});
+```
+
+3. perform an assertion with global expect function asking whether the link element from the query above is present in the document `toBeInTheDocument`.  
+
+built in utility that jest incorporates globally without needing an explicit export.
+
+expect function receives result of a query and appends specific matcher.
+
+the matcher refers to an element visible in the whole document.
+
+```jsx
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+test('full test, to assert if a component containing little lemon restaurant string is present in the document.body', () => {
+  render(<App />);
+  const linkElement = screen.getByText(/little lemon restaurant/i);
+  expect(linkElement).toBeInTheDocument();
+});
+```
+### **self-review: writing more test scenarios**
+
+1. what's the correct call to fire an onChange event on an input with react testing library fireEvent API?
+
+```jsx
+fireEvent.change(input, {target: {value: 'myValue'}});
+```
+
+2. how would you fire a click event on a submit button with react testing library fire event API?
+
+```jsx
+fireEvent.click(button);
+```
+
+3. when locating an element by using a screen querying method from react testing library, what is the returned value of the call if the element is not found?  
+`null`
+
+### **introduction to continuous integration**
+
+**introduction** 
+
+CI continuous integration is a software development technique
+
+developers use version control system like git to push code changes daily multiple times a day.
+
+instead of building features in isolation and integrating them at the end, CI follows a more iterative approach.
+
+each merge triggers an automated set of scripts to automatically build and test your application.
+
+script automation ensures to minimize error introduction
+
+if some scripts fail the CI system stops further stages and issues a report
+
+**why CI is important**
+
+taking smaller steps helps estimate and validate more often
+
+shorter feedback loops involve more iterations.
+
+number of iterations drives the process forward
+
+working with long feedback loops increases the chances of introducing errors
+
+automating continuous integration steps avoid repetitive work and minimize human errors
+
+CI tools monitor central code repository and prevents people from deciding when and how to run tests.
+
+**CI pipeline**
+
+continuous delivery  
+developer writes code pushes to code repository
+
+continuous integration  
+app build process  
+tests (code analysis, unit tests, integration tests, security scanning)
+
+**development workflow**
+
+1. developer creates a new branch in github performs changes in the code and commits them.
+2. developer pushes work to github, CI system builds the code on its servers and runs automated test suite.
+3. if CI system detects error, developer who pushed code gets notified and the status changes to red. That same developer is responsible to fix the problem.
+4. if status is green and all is well pipeline moves to its next stage, deploying a new version of the application to a staging server. this version can be used by quality assurance (QA) team to verify changes in production-like environment.
+
+**benefits of continous integration**
+
+- improved developer productivity
+manual tasks are automated  
+
+- deliver working software more often  
+CI feedback loop delivers more value to customers 
+
+- find bugs earlier and fix them faster  
+verifies code correctness  
+validates application behavior  
+makes sure coding style follows conventions  
+
+### **style guides**
+
+- code is much more easier to read and debug
+- make sure code is self-documenting
+
+### knowledge check: automated testing
+
+1. why is automated testing important
+- It offers a faster feedback cycle, bringing faster validation and helping the development team to detect problems or bugs early.
+- It saves time to development teams.
+- It reduces human error.
+
+2. What are some of the best practices when writing your automated tests? Select all that apply
+- They should resemble the way your software is used.
+- They should be maintainable in the long run.
+
+3. Imagine you have a component that renders both an input tag and a label tag with the exact text Comments:. Inside your test, you have the below piece of code:
+
+```jsx
+const element = screen.getByLabelText(/Comments:/);
+```
+- the input element
+
+4. What kind of data would the handleSubmit variable represent?
+
+```jsx
+const handleSubmit = jest.fn();
+render(<FeedbackForm onSubmit={handleSubmit} />);
+```
+- A mock function to track how is called by external code and thus explore the arguments passed in.
+
+5. What are some of the benefits of Continuous Integration (CI)? Select all that apply.
+- Deliver working software more often.
+- Improved developer productivity.
+- Find bugs earlier and fix them faster.
+
+### **module summary**
+
+- JSX in depth
+
+- difference between components (functions) and elements (plain javascript objects)
+
+- component composition and the use of children props
+
+- containment (components that don't know their children beforehand) and specialization (define components as special cases), two main properties of component composition
+
+- React.cloneElement (clones and returns a new element) and React.Children.map (manipulates children)
+
+- spread operator in react enables copying and merging
+
+- cross-cutting concerns refers to generic functionality that is not related to the application business logic. react components are not always suitable for generic functionality
+
+- cross-cutting higher-order component (enables abstraction)
+
+- cross-cutting technique render props (special prop with a particular attribute of being a function that returns a react element)
+
+### **module quiz: JSX and testing**
+
+1. What are some of the features of component containment? 
+- A component that uses the children prop to pass children elements directly as their content.
+- The fact that some components don’t know their children ahead of time. 
+- A component that acts as a generic box. 
+
+2. What are the props that all components have by default?
+- children
+
+3. What is a React Element? 
+- A JavaScript object that represents the final HTML output.
+- An intermediary representation that describes a component instance. 
+
+4. what are all the features implemented from component composition with children?
+
+```jsx
+function ConfirmationDialog() {
+  return (
+    <Dialog color="blue">
+      <h1 className="Dialog-title">
+        Thanks!
+      </h1>
+      <p className="Dialog-message">
+        We’ll process your order in less than 24 hours.
+      </p>
+    </Dialog>
+  );
+}
+```
+
+- component specialization and containment
+
+5. What are some of the use cases that the React.cloneElement API allows you to achieve?
+- Modify children's properties. 
+- Add to children properties. 
+- Extend the functionality of children components. 
+
+6. what’s wrong about its implementation?
+
+```jsx
+const Row = ({ children, spacing }) => {
+  const childStyle = {
+    marginLeft: `${spacing}px`,
+  };
+
+  return(
+    <div className="Row">
+      {React.Children.map(children, (child, index) => {
+        child.props.style = {
+          ...child.props.style,
+          ...(index > 0 ? childStyle : {}),
+        };
+        
+        return child;
+      })}
+    </div>
+  );
+};
+```
+- Each child is being mutated. 
+
+7. what would be logged into the console when clicking the Submit button that gets rendered on the screen?
+
+```jsx
+const Button = ({ children, ...rest }) => (
+  <button onClick={() => console.log("ButtonClick")} {...rest}>
+    {children}
+  </button>
+);
+
+const withClick = (Component) => {
+  const handleClick = () => {
+    console.log("WithClick");
+  };
+
+  return (props) => {
+    return <Component onClick={handleClick} {...props} />;
+  };
+};
+
+const MyButton = withClick(Button);
+
+export default function App() {
+  return <MyButton onClick={() => console.log("AppClick")}>Submit</MyButton>;
+}
+```
+
+- "AppClick"
+
+8. what are valid solutions to encapsulate cross-cutting concerns?
+- Higher order components. 
+- Render props pattern. 
+- custom hooks??
+
+9. What does the screen utility object from react-testing-library represent when performing queries against it?
+- whole page or root document
+
+10. When writing tests with Jest and react-testing-library, what matcher would you have to use to assert that a button is disabled?
+- toHaveAttribute
+
