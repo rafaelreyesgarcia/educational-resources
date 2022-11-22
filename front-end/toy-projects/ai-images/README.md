@@ -36,7 +36,8 @@ import Configuration and OpenAIApi
 
 ```jsx
 const configuration = new Configuration({
-  apiKey: import.meta.env.REACT_APP_API_KEY,
+  // apiKey: import.meta.env.REACT_APP_API_KEY, original tutorial
+  apiKey: process.env.REACT_APP_API_KEY,
 });
 ```
 
