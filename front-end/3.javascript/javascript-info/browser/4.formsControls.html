@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>forms and controls</title>
+
+  <style>
+    .error {
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <form action="" name="firstForm">
+    <input name="firstElement" value="1">
+    <input name="secondInput" value="2">
+
+    <input type="radio" name="age" value="10">
+    <input type="radio" name="age" value="20">
+
+    <fieldset name="userFields">
+      <legend>info</legend>
+      <label for="login">login</label>
+      <input type="text" name="userName">
+      <label for="password"> password</label>
+      <input type="text" name="password">
+    </fieldset>
+    
+    <label for="completedTask">completed task</label>
+    <input type="checkbox" name="completedTask">
+  </form>
+  <form action="" name="second-form"></form>
+  
+  <script>
+    console.log(document.forms.firstForm);
+    console.log(document.forms[1]);
+
+    let firstForm = document.forms.firstForm;
+    let elem = firstForm.elements.firstElement;
+
+    console.log(elem.value);
+
+    // accessing multiple elements with same name
+    let ageElems = firstForm.elements.age;
+    console.log(ageElems[1]);
+    
+    // fieldsets
+    console.log(firstForm.elements.userName.value);
+    
+    let fieldset = firstForm.elements.userFields;
+    console.log(fieldset);
+    console.log(fieldset.elements.userName == firstForm.elements.userName);
+
+    // change value of input elements
+    let input = firstForm.elements.secondInput;
+    input.value = 'new value';
+
+    let checkbox = firstForm.elements.completedTask;
+    checkbox.checked = true;
+
+  </script>
+
+  <label for="select">fruit options</label>
+  <select name="select" id="select">
+    <option value="apple">apple</option>
+    <option value="pear">pear</option>
+    <option value="banana">banana</option>
+  </select>
+
+  <script>
+    // three different ways of selecting an option element
+    select.options[2].selected = true;
+    // select.selectedIndex = 2;
+    select.value = 'pear';
+  </script>
+
+  <!-- get selected values from a multi-select -->
+  <select name="secondSelect" id="secondSelect" multiple>
+    <option value="blues" selected>blues</option>
+    <option value="rock" selected>rock</option>
+    <option value="classic">classic</option>
+  </select>
+
+  <script>
+    let selected = Array.from(secondSelect.options)
+      .filter(option => option.selected)
+      .map(option => option.value);
+
+    console.log(selected);
+  </script>
+
+  <!-- create an option element -->
+  <script>
+    let option = new Option('drum&bass', 'drum&bass', true, true);
+    
+    secondSelect.appendChild(option);
+  
+  </script>
+
+  <!-- focus() blur() methods -->
+  <label for="email">email:</label>
+  <input type="email" id="email" placeholder="name@example.com">
+  <input type="text" style="width:220px" placeholder="continue...">
+
+  <script>
+    email.onblur = function() {
+      if (!this.value.includes('@')) {
+        this.classList.add('error');
+
+        input.focus(); /* puts focus back */
+      } else {
+        this.classList.remove('error');
+      }
+    };
+  </script>
+
+  <input type="text" onchange="alert(this.value)">
+  <input type="button" value="button">
+
+  <select onchange="alert(this.value)">
+    <option value="">select a number</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+  </select>
+
+  
+  <input type="text" id="inputEvent">
+  <label for="inputEvent">oninput: <span id="result"></span></label>
+  <script>
+    inputEvent.oninput = function() {
+      result.innerHTML = inputEvent.value;
+    }
+  </script>
+
+  <!-- dynamically create a form submission request -->
+  <script>
+    let form = document.createElement('form');
+  </script>
+</body>
+</html>

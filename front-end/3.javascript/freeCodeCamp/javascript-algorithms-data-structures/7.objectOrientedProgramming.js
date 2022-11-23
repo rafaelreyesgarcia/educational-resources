@@ -482,5 +482,146 @@ Object (supertype of Animal) has eat() NO, but JS stopped at Bird
 // use a Mixin to add common behavior between unrelated objects
 
 /* 
+inheritance is not the best solution for unrelated objects.
+
+a bird and an airplane can both fly both they are not the same type of object
+
+a mixin allows other objects to use a collection of functions
+*/
+
+let flyMixin = function(obj) {
+  obj.fly = function() {
+    return `The ${this.name} is flying, woosh!`;
+  }
+}
+
+let butterfly = {
+  name: 'itsy',
+  numWings: 2
+};
+
+let plane = {
+  name: 'boeing',
+  model: '777',
+  numPassengers: 524
+};
+
+flyMixin(butterfly); // this call returns undefined
+flyMixin(plane); // returns undefined
+
+console.log(butterfly.fly());
+console.log(plane.fly());
+
+// use closure to protect properties within an object from being modified externally
+
+/* 
+butterfly has a public property called name
+
+any code can change the variable name to any value
+
+create variable within constructor function
+
+this changes the scope of that variable to be within the constructor function vs available globally
+
+getHatchedEggCount has access to the private variable hatchedEgg
+
+getHatchedEggCount is declared in the same execution context as hatchedEgg
+
+a functin always has access to the execution context in which it was created thorugh closure
 
 */
+
+function Penguin() {
+  let hatchedEgg = 10;
+
+  this.getHatchedEggCount = function() {
+    return hatchedEgg;
+  };
+}
+
+let penguin = new Penguin();
+
+console.log(penguin.getHatchedEggCount());
+
+// understand immediately invoked function expression IIFE
+
+/* 
+execute a function as soon as its declared
+
+anonymous function expression that executes right away
+
+has no name and is not stored in a variable
+
+
+*/
+
+(function () {
+  console.log('chirp, chirp!');
+})();
+
+// named function declaration
+function makeNest() {
+  console.log("A cozy nest is ready");
+}
+// named function call
+makeNest();
+
+// anonymous IIFE
+(function() {
+  console.log("A cozy nest is ready");
+})();
+
+// using an IIFE to create a module
+
+/* 
+IIFE are often used to group related functionality
+
+advantage of the module pattern is that all behaviors can be packed into a single object that can later be used
+*/
+
+let motionModule = (function() {
+  return {
+    glideMixin: function(obj) {
+      obj.glide = function() {
+        console.log("gliding!");
+      };
+    },
+    flyMixin: function(obj) {
+      obj.fly = function() {
+        console.log('flying!');
+      };
+    },
+  }
+})();
+
+motionModule.glideMixin(penguin);
+
+penguin.glide();
+
+// original mixin implementation
+let isCuteMixin = function(obj) {
+  obj.isCute = function() {
+    return true;
+  };
+};
+let singMixin = function(obj) {
+  obj.sing = function() {
+    console.log("Singing to an awesome tune");
+  };
+};
+
+// converted into a module
+let funModule = (function() {
+  return {
+    isCuteMixin: function(obj) {
+      obj.isCute = function() {
+        return true;
+      };
+    },
+    singMixin: function(obj) {
+      obj.sing = function() {
+        console.log("Singing to an awesome tune");
+      };
+    },
+  }
+})();

@@ -655,7 +655,7 @@ take functions that return react elements and call them inside their render logi
 }}>
 ```
 
-the new props are injected dynamicallyas the new parameter of the function
+the new props are injected dynamically as the new parameter of the function
 
 ### self-review: render props and HOCs
 

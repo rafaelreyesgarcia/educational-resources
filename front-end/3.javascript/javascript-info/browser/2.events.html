@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>events</title>
+
+  <style>
+    .nw {
+      background-color: grey;
+    }
+    .n {
+      background-color: blue;
+      color: white;
+    }
+    .ne {
+      background-color: yellow;
+    }
+    .highlight {
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <!-- assigning handlers -->
+  <!-- via HTML-attribute -->
+  <input type="button" value="click me" onclick="alert('Clicked!')">
+
+  <script>
+    function countRabbits() {
+      for (let i = 0; i <= 3; i++) {
+        alert('rabbit number: ' + i);
+      }
+    }
+  </script>
+
+  <input type="button" onclick="countRabbits()" value="count the rabbits!">
+
+  <!-- via DOM property -->
+  <input type="button" id="inputElem" value="want to click?">
+  <script>
+    inputElem.onclick = function() {
+      alert('thank you for clicking ;)');
+    }
+  </script>
+
+  <!-- handler: this (element) -->
+  <button onclick="alert(this.innerHTML)">text inside the button</button>
+
+  <!-- addEventListener / removeEventListener -->
+
+  <input type="button" value="another example" id="anotherExample">
+
+  <!-- setting up multiple handlers on the same event -->
+  <script>
+    function handler1() {
+      alert('thanks!');
+    };
+    function handler2() {
+      alert('thanks again! :)');
+    }
+
+    anotherExample.onclick = () => alert('hello');
+    anotherExample.addEventListener('click', handler1);
+    anotherExample.addEventListener('click', handler2);
+  </script>
+
+  <!-- event object -->
+  <!-- getting (Reading) pointer coordinates -->
+
+  <input type="button" value="lets get the coords" id="coords">
+
+  <script>
+    coords.onclick = function(event) {
+      alert(event.type + "at" + event.currentTarget);
+      alert('coordinates: ' + event.clientX + ":" + event.clientY);
+    };
+  </script>
+
+  <!-- handleEvent object as handlers-->
+  <button id="moreElems">yet another example</button>
+  <script>
+    let obj = {
+      handleEvent(event) {
+        alert(event.type + " at " + event.currentTarget);
+      }
+    };
+
+    moreElems.addEventListener('click', obj);
+  </script>
+  <!-- custom object class -->
+  <button id="stillMore">custom object class</button>
+
+  <script>
+    class Menu {
+      handleEvent(event) {
+        switch(event.type) {
+          case 'mousedown':
+            stillMore.innerHTML = 'mouse button pressed';
+            break;
+          case 'mouseup':
+            stillMore.innerHTML += '...and released.';
+            break;
+        }
+      }
+    }
+
+    let menu = new Menu();
+  </script>
+
+  <!-- bubbling and capturing -->
+  <div onclick="alert('the handler is called!')">
+    <em>if you click on <code>EM</code></em> or <code>code</code>, the handler on <code>DIV</code>, runs
+  </div>
+
+  <form onclick="alert('onclick on form')">
+    FORM
+    <div onclick="alert('onlick on div')">
+      DIV
+      <p onclick="alert('onclick on p')">
+        P 
+      </p>
+    </div>
+  </form>
+
+  <form id="someForm">
+    I'M A FORM
+    <div onclick="alert('you clicked on a div')">
+      I'M A DIV
+      <p onclick="alert('you clicked on a p')">
+        I'M A P
+      </p>
+    </div>
+  </form>
+
+  <script>
+    someForm.onclick = function(event) {
+      setTimeout(() => {
+        alert('target = ' + event.target.tagName + ', this = ' + this.tagName);
+      }, 0);
+    }
+  </script>
+
+  <div onclick="alert('bubbling doesn\'t reach here')">
+    <button onclick="event.stopPropagation()">click me! :p</button>
+  </div>
+
+  <form id="aForm">
+    FORM
+    <div>
+      DIV 
+      <p>
+        P
+      </p>
+    </div>
+  </form>
+
+  <script>
+    let aForm = document.querySelector('#aForm');
+    console.log(aForm);
+    for (let elem of aForm) {
+      elem.addEventListener('click', e => alert(`capturing: ${elem.tagName}`), true);
+      elem.addEventListener('click', e => alert(`bubbling: ${elem.tagName}`));
+    }
+  </script>
+
+  <!-- event delegation -->
+  <table id="table">
+    <tr>
+      <th colspan="3"><em>bagua</em> chart: direction, element, color, meaning</th>
+    </tr>
+    <tr>
+      <td class="nw"><strong>northwest</strong><br>metal <br>silver <br>elders</td>
+      <td class="n"><strong>north</strong><br>water <br>blue <br>change</td>
+      <td class="ne"><strong>northeast</strong><br>earth <br>yellow <br>direction</td>
+    </tr>
+  </table>
+
+  <script>
+    let selectTd;
+
+    table.onclick = function(event) {
+      let target = event.target;
+
+      if (target.tagName != 'TD') return;
+
+      highlight(target);
+    }
+    // the click might still ocurr inside <td> not on it
+    // add functionality to check if the element that triggered the event is a <td>
+
+    /* 
+    table.onclick = function(event) {
+      let td = event.target.closest('td');
+      if (!td) return;
+        if event.target is not inside any td then the call returns and does nothing
+      if (!table.contains(td)) return;
+      highlight(td);
+    }
+    */
+
+    function highlight(td) {
+      if(selectTd) {
+        selectTd.classList.remove('highlight');
+      }
+      selectTd = td;
+      selectTd.classList.add('highlight');
+    }
+  </script>
+
+  <!-- action behavior with datasets and classes -->
+  <div id="menuBar">
+    <button data-action="save">save</button>
+    <button data-action="load">load</button>
+    <button data-action="search">search</button>
+  </div>
+
+  <script>
+    class MenuBar {
+      constructor(elemen) {
+        this.elemen = elemen;
+        elemen.onclick = this.onClick.bind(this);
+      }
+
+      save() {
+        alert('saving');
+      }
+
+      load() {
+        alert('loading');
+      }
+
+      search() {
+        alert('searching');
+      }
+
+      onClick(event) {
+        let action = event.target.dataset.action;
+        if (action) {
+          this[action]();
+        }
+      };
+    }
+
+    new MenuBar(menuBar);
+  </script>
+
+  <input type="button" value="1" data-counter>
+  <input type="button" value="2" data-counter>
+
+  <script>
+    document.addEventListener('click', function(event) {
+      if(event.target.dataset.counter != undefined) {
+        event.target.value++;
+      }
+    })
+  </script>
+
+  <!-- toggle behavior with datasets -->
+  <button data-toggle-id="subscribe-email">
+    show the subscription form
+  </button>
+
+  <form id="subscribe-email" hidden>
+    <label for="mail">your e-mail:</label>
+    <input type="mail" id="mail">
+  </form>
+
+  <script>
+    document.addEventListener('click', function(event) {
+      let id = event.target.dataset.toggleId;
+      if (!id) return;
+
+      let elem = document.getElementById(id);
+
+      elem.hidden = !elem.hidden;
+    })
+  </script>
+
+  <!-- prevent browser default actions -->
+  <a href="/" onclick="return false">click here!</a>
+  <a href="/" onclick="event.preventDefault()">click here!</a>
+
+  <ul id="secondMenu" class="secondMenu">
+    <li><a href="/html">HTML</a></li>
+    <li><a href="/javascript">JS</a></li>
+    <li><a href="/css">CSS</a></li>
+    <!-- 
+      menu items are implemented as HTML-links not buttons
+      right click to open a new window is not possible with <button> or <span>
+      search engines follow <a href=""> links while indexing
+    -->
+  </ul>
+
+  <script>
+    secondMenu.onclick = function(event) {
+      if (event.target.nodeName != 'A') return;
+
+      let href = event.target.getAttribute('href');
+      alert(href);
+      
+      return false;
+      // prevents browser action
+    }
+  </script>
+
+  <!-- follow-up events don't trigger -->
+  <input value="focus works" onfocus="this.value=''">
+  <input value="won't work" onmousedown="return false" onfocus="this.value=''">
+
+  <!-- event.defaultPrevented -->
+  <!-- custom contextmenu -->
+  <button>right-click shows browser context menu</button>
+  <button oncontextmenu="alert('draw a menu'); return false">shows custom context menu</button>
+
+  <!-- custom document-wide context menu -->
+  <p>right-click here for document context menu</p>
+  <button id="buttonContext">right-click here for button context menu</button>
+
+  <script>
+    buttonContext.oncontextmenu = function(event) {
+      event.preventDefault();
+      /* 
+      event.stopPropagation();
+      would stop bubbling and triggering both button and document context menu
+      price high of never allowing to access info about right clicks for any outer code
+      */
+      alert('button context menu');
+    };
+
+    document.oncontextmenu = function(event) {
+      if (event.defaultPrevented) return;
+      // fixes bubbling by checking if the right-click prevented default
+      event.preventDefault();
+      alert('document context menu');
+    };
+  </script>
+
+  <!-- custom events -->
+  <h1 id="idName">hello from the script!</h1>
+
+  <script>
+    // catches on document
+    document.addEventListener('hello', function(event) {
+      alert('hello from' + event.target.tagName);
+    });
+    // dispatch on idName
+    let customEvent = new Event('hello', {bubbles: true});
+    idName.dispatchEvent(customEvent);
+
+    let someEvent = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      clientX: 100,
+      clientY: 100
+    });
+    
+  </script>
+
+  <h1 id="customElem">hello from rafael!</h1>
+  <script>
+    customElem.addEventListener('hello', function(event) {
+      alert(event.detail.name);
+    });
+
+    customElem.dispatchEvent(new CustomEvent('hello', {
+      detail: {name: 'rafael'}
+    }));
+  </script>
+
+  <pre id="rabbit">
+  |\   /|
+   \|_|/
+    /. .\
+    =\_Y_/=
+   {>o}
+  </pre>
+  
+  <button onclick="hide()">hide()</button>
+
+  <script>
+    function hide() {
+      let event = new CustomEvent('hide', {
+        cancelable: true
+      });
+      if (!rabbit.dispatchEvent(event)) {
+        alert('the action was prevented by a handler');
+      } else {
+        rabbit.hidden = true;
+      }
+    }
+
+    rabbit.addEventListener('hide', function(event) {
+      if (confirm('call preventDefault?')) {
+        event.preventDefault();
+      }
+    })
+  </script>
+</body>
+</html>
