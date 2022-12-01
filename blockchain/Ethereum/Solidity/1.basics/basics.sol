@@ -12,7 +12,7 @@ contract SimpleStorage {
 
   // exposes the value to other contracts to access
   function get() public view returns (uint) {
-    return storedData;
+    return storeData;
   }
 }
 

@@ -663,7 +663,194 @@ valid curly braces use
     
 objects can be passed in JSX  
 objects are denoted with curly braces  
-double curly braces denote passing a js object inJSX  
+double curly braces denote passing a js object in JSX
+
+### **passing props to a component**
+
+components use props to communicate with each other.
+
+parent component can pass props (information) to children
+
+you can pass any javascript value through props including
+- objects
+- arrays
+- functions
+
+**familiar props**
+
+props are information that you pass to a JSX tag.
+
+```jsx
+// passing props to an <img>
+return (
+  <img 
+    className="avatar"
+    src="https://link.com/avatar"
+    alt="lin lanying"
+    width={100}
+    height={100}
+  />
+);
+```
+props you can pass to an image are predefined (ReactDOM conforms to HTML standards)
+
+props to your own components are allows to be custom
+
+**1. parent component**
+```jsx
+export default function Profile() {
+  return (
+    <Avatar 
+      person={{name: 'lin lanying', imageId: '1bx5QH6'}}
+      size={100}
+    />
+    <Avatar 
+      person={{
+        name: 'Aklilu Lemma',
+        imageId: 'OKS67lh',
+      }}
+      size={70}
+    />
+  )
+}
+```
+**2. child component**
+```jsx
+import { getImageUrl } from './utils.js';
+
+function Avatar({person, size}) {
+  return (
+    <img 
+      className="avatar"
+      src={getImageUrl(person)}
+      alt={person.name}
+      width={size}
+      height={size}
+    />
+  )
+}
+```
+
+props are like adjustable knobs.
+
+serve the same role as arguments in functions
+
+props object is the only valid argument to components.
+
+```jsx
+// destructuring the props object
+function Avatar({person, size}){
+  // code
+}
+
+function Avatar(props) {
+  let person = props.person;
+  let size = props.size;
+}
+
+// default values
+
+function Avatar({person, size = 100}){
+  // code
+}
+
+// repetitive props 
+function Profile({person, size, isSepia, thickBorder}) {
+  retunr (
+    <div>
+      <Avatar 
+        person={person}
+        size={size}
+        isSepia={isSepia}
+        thickBorder={thickBorder}
+      />
+    </div>
+  );
+}
+
+// spread syntax
+function Profile(props) {
+  return (
+    <div>
+      <Avatar {...props} />
+    </div>
+  )
+}
+```
+
+**passing JSX as children**
+
+```jsx
+
+// built-in browser tag nesting is common
+function Card({children}) {
+  return (
+    <div className="card">
+      {children}
+    </div>
+  );
+}
+
+function Avatar({person, size}) {
+  return (
+    <img 
+      src={getImageURl(person)}
+      width={size}
+    />
+  )
+}
+
+function getImageUrl(person, size = 's') {
+  return (
+    'https://i.imgur.com' +
+    person.imageId +
+    size +
+    '.jpg'
+  );
+}
+// nesting components
+export default function Profile() {
+  return (
+    <Card>
+      <Avatar 
+        size={100}
+        person={{
+          name: 'katsuko saruhashi',
+          imageId: 'YfeOqp2'
+        }}
+      />
+    </Card>
+  )
+}
+
+
+```
+
+when content is nested inside a JSX tag, the parent component will receive the nested content in a prop called children.
+
+children prop will often be used for visual wrappers: panels, grids, etc.
+
+```jsx
+export default function Clock({color, time}) {
+  return (
+    <h1 style={{ color: color }}>
+      {time}
+    </h1>
+  );
+}
+```
+
+props are immutable.
+
+when a component needs to change its props, it has to ask the parent to pass different props.
+
+old props gets cast aside
+
+javascript will garbage collect them eventually
+
+### **conditional rendering**
+
+
 
 ## **ADDING INTERACTIVITY**
 ## **MANAGING STATE**

@@ -1,1095 +1,1255 @@
-# solidity source file
+# Language Description
 
-  can contain
-    contract definitions
-    import
-    pragma
-    for directives
-    struct, enum, function, error and constant variable definitions
+## **solidity source file**
+
+can contain
+- contract definitions
+- import
+- pragma
+- for directives
+- struct, enum, function, error and constant variable definitions
   
-  ## SPDX license identifier
-    the solidity compiler encourages the use of a machine-readable SPDX licence identifier
+### **SPDX license identifier**
 
-    it doesn't validate the license is part of the SPDX whitelist, it supplies it in the bytecode metadata
+the solidity compiler encourages the use of a machine-readable SPDX licence identifier
 
-    solidity follows npm recommendation
-      UNLICENSED
-        no usage allowed
-      UNLICENSE
-        grants rights to everyone
+it doesn't validate the license is part of the SPDX whitelist, it supplies it in the bytecode metadata
+
+solidity follows npm recommendation
+- **UNLICENSED**
+no usage allowed
+- **UNLICENSE**
+grants rights to everyone
   
-  ## pragmas
+### **pragmas**
 
-    pragma keyword enables compiler features or checks
+pragma keyword enables compiler features or checks
 
-    pragma directive always local to the source file
+pragma directive always local to the source file
 
-    version pragma should be annotated to reject compilation with future compilers that could introduce unwanted changes
+version pragma should be annotated to reject compilation with future compilers that could introduce unwanted changes
 
-    pragma solidity ^0.5.2;
+`pragma solidity ^0.5.2;`
   
-  ## ABI coder pragma
+### **ABI coder pragma**
 
-    pragma abicoder v2 or v2
-    different implementations of the ABI encoder, decoder
+pragma abicoder v2 or v2
 
-    v2 
-      works arbitrarily on nested arrays and structs'
+different implementations of the ABI encoder, decoder
+
+**v2**
+works arbitrarily on nested arrays and structs'
       
-      extensive validation and safety checks (higher gas cost, higher security)
+extensive validation and safety checks (higher gas cost, higher security)
 
-  ## experimental pragma
-    enable features of the compiler or language that are not yet enabled
+### **experimental pragma**
 
-    SMTChecker
+enable features of the compiler or language that are not yet enabled
+
+SMTChecker
   
-  ## importing source files
+### **importing source files**
 
-    import "filename";
+import "filename";
     
-    import path
-      imports all global symbols from filename and symbols imported there, into current global scope
+**import path**
 
-      not recommended it unpredictably pollutes namespace
-    
-    solidity inherits ES6 import/export syntax 
-      doesn't support default export
+imports all global symbols from filename and symbols imported there, into current global scope
 
-    import * as symbolName from "filename"; 
-      all global symbols become available through symbolName
-        symbolName.symbol
+not recommended it unpredictably pollutes namespace
     
-    import "filename" as symbolName 
-      variant not present in ES6
+solidity inherits ES6 import/export syntax 
+
+doesn't support default export
+
+```js
+import * as symbolName from "filename";
+``` 
+
+all global symbols become available through symbolName
+```js
+
+symbolName.symbol
     
-    import {symbol1 as alias, symbol2} from "filename";
+import "filename" as symbolName 
+  variant not present in ES6
+
+import {symbol1 as alias, symbol2} from "filename";
+```
+### **import paths**
+
+compiler abstracts away the details of filesystem where source files are stored to support reproducible builds on all platforms
+
+compiler maintains an internal database (virtual filesystem) each source unit is assigned a name (opaque and unstructured identifier)
+
+import path translates intoa source unit name used to find the corresponding source unit in the compiler's internal database
+
+standard JSON API can provide the names and content of source files as part as the compiler input
+
+### comments
+
+```js
+// single line
+//
+// multi-line
+/* */
+// NatSpec
+/** 
+ * */ 
+// or 
+///
+// used directly above function declarations or statements
+```
   
-  ## import paths
+## **structure of a contract**
 
-    compiler abstracts away the details of filesystem where source files are stored to support reproducible builds on all platforms
+contracts are similar to classes in object-oriented languages
 
-    compiler maintains an internal database (virtual filesystem) each source unit is assigned a name (opaque and unstructured identifier)
-
-    import path translates intoa source unit name used to find the corresponding source unit in the compiler's internal database
-
-    standard JSON API can provide the names and content of source files as part as the compiler input
-
-  ## comments
-
-    single line
-    //
-    multi-line
-    /* */
-    NatSpec
-    /** */ or ///
-      used directly above function declarations or statements
+contracts can contain declarations of
+- state variables
+- functions
+- function modifiers
+- events
+- errors
+- struct types
+- enum types
   
-# structure of a contract
+contracts support inheritance
 
-  contracts are similar to classes in object-oriented languages
+contracts can be libraries and interfaces
 
-  contracts can contain declarations of
-    state variables
-    functions
-    function modifiers
-    events
-    errors
-    struct types
-    enum types
+### **state variables**
+
+permanently stored in contract storage
+
+uint storedData;
+
+### **functions**
+
+executable units of code
+
+defined inside (most common) or outside of a contract
+
+```sol
+function bid() public payable {block};
+
+function helper(uint x) pure returns (uint) {
+  return x * 2;
+}
+```
+
+function calls can happen internally or externally and have different levels of visibility
+
+functions accept parameters and return variables to pass parameters and valus between them
+
+### **function modifiers**
+
+amend semantics of functions
+
+modifiers can be overwritten
+
+```sol
+address public seller; 
+
+modifier onlySeller() {
+  require(
+    msg.sender == seller,
+    "only seller can call this."
+  )
+}
+```
+
+### **events**
+
+convenience interfaces with the EVM logging facilities
+
+```sol
+event highestBidIncreased(address bidder, uint amount);
+
+function bid() public payable {
+  emit HighestBidIncreased(msg.sender, msg.value);
+}
+```
   
-  contracts support inheritance
+### **errors**
 
-  contracts can be libraries and interfaces
+allow to define descriptive names and data when a task failed
 
-  ## state variables
+can be used in revert statements
 
-    permanently stored in contract storage
+string descriptions are more costly than errors
 
-    uint storedData;
+erros allow you to encode data
 
-  ## functions
-    executable units of code
-    defined inside (most common) or outside of a contract
+NatSpec can describe the error
 
-    function bid() public payable {block};
+### **struct types**
 
-    function helper(uint x) pure returns (uint) {
-      return x * 2;
-    }
+custom defined types that can group several variables
 
-    function calls can happen internally or externally and have different levels of visibility
-
-    functions accept parameters and return variables to pass parameters and valus between them
-
-  ## function modifiers
-    amend semantics of functions
-
-    modifiers can be overwritten
-
-    address public seller; 
-
-    modifier onlySeller() {
-      require(
-        msg.sender == seller,
-        "only seller can call this."
-      )
-    }
-
-  ## events
-    convenience interfaces with the EVM logging facilities
-
-    event highestBidIncreased(address bidder, uint amount);
-
-    function bid() public payable {
-      emit HighestBidIncreased(msg.sender, msg.value);
-    }
+```sol
+contract ballow {
+  struct Voter {
+    uint weight;
+    bool voted;
+    address delegate;
+    uint vode;
+  }
+}
+```
   
-  ## errors
+### **enum types**
 
-    allow to define descriptive names and data when a task failed
+can be used to create custom type with a finite set of constant values
 
-    can be used in revert statements
+```sol
+contract Purchase {
+  enum State { Created, Locked, Inactive }
+}
+```
 
-    string descriptions are more costly than errors
+## **types**
 
-    erros allow you to encode data
-    NatSpec can describe the error
+static typed language
 
-  ## struct types
-    custom defined types that can group several variables
+the type of each variable (state and local) needs to be declared
 
-    contract ballow {
-      struct Voter {
-        uint weight;
-        bool voted;
-        address delegate;
-        uint vode;
-      }
-    }
-  ## enum types
-    can be used to create custom type with a finite set of constant values
+types can interact with each other in expressions with operators
 
-    contract Purchase {
-      enum State { Created, Locked, Inactive }
-    }
+undefined or null doesn't exist in solidity
 
-# types
+newly declared variables have a default value depending on the type
 
-  static typed language
-    the type of each variable (state and local) needs to be declared
+revert function handles unexpected values
 
-  types can interact with each other in expressions with operators
+**valye types** are always copied when they are used as arguments or assignments
 
-  undefined or null doesn't exist in solidity
+### **booleans**
 
-  newly declared variables have a default value depending on the type
+constant true or false values 
 
-  revert function handles unexpected values
+operators
+- ! logical negation
+- && logical conjunction
+- || logical disjunction
+- == equality
+- != inequality
 
-  **valye types** are always copied when they are used as arguments or assignments
+### **integers**
 
-  ## booleans
+signed (int) and unsigned (uint) of various sizes
 
-    constant true or false values 
+uint8 uint256 in steps of 8 bits and int8 to int256
 
-    operators
-    - ! logical negation
-    - && logical conjunction
-    - || logical disjunction
-    - == equality
-    - != inequality
+uint and int == uint256 int256
 
-  ## integers
+operators
 
-    signed (int) and unsigned (uint) of various sizes
-    uint8 uint256 in steps of 8 bits and int8 to int256
-    uint and int == uint256 int256
+- comparison <= < == != >= > evaluate to a boolean
+- bit & | ^ (bitwise exclusive) ~ (bitwise negation)
+- shift << >>
+- arithmetic + - unary - for signed integers * / %  (modulo) ** (exponentiation)
 
-    operators
-    - comparison <= < == != >= > evaluate to a boolean
-    - bit & | ^ (bitwise exclusive) ~ (bitwise negation)
-    - shift << >>
-    - arithmetic + - unary - for signed integers * / %  (modulo) ** (exponentiation)
+uint32 is 0 up to 2**32 - 1
 
-    uint32 is 0 up to 2**32 - 1
-
-    arithmetic is performed on integers unchecked or checked
+arithmetic is performed on integers unchecked or checked
     
-    unchecked (wrapping) mode
-      switch using unchecked { ... }
+**unchecked (wrapping) mode**
+switch using unchecked { ... }
 
-    checked mode
-      default 
-      if result of an operation falls outside the value range of the type, the call is reverted through a failing assertion
+**checked mode**
+
+default 
+
+if result of an operation falls outside the value range of the type, the call is reverted through a failing assertion
     
-    comparison
-      obtained by comparing integer values
+**comparison**  
+obtained by comparing integer values
     
-    bit operations
-      performed on the two's complement representation of the number.
+**bit operations**  
+performed on the two's complement representation of the number.
     
-    shifts  
-      type of the left hand, truncating the result to match the type.
+**shifts**    
+type of the left hand, truncating the result to match the type.
     
-    addition, substraction, multiplication
+**addition, substraction, multiplication**  
 
-      all arithmetic is checked for under or overflow by default
+all arithmetic is checked for under or overflow by default
 
-      can be disabled with unchecked block
+can be disabled with unchecked block
     
-    division
-      in solidity division rounds towards zero
+**division**  
+in solidity division rounds towards zero
     
-      division on literals result in fractional values of arbitrary precision
+division on literals result in fractional values of arbitrary precision
 
-      division by zero causes a panic error
+division by zero causes a panic error
 
-      type(int).min / (-1) is the only case where a division causes overflow
+type(int).min / (-1) is the only case where a division causes overflow
 
-    modulo
-      a % n yields the remainder r after the division of the operand a by n
+**modulo**  
+a % n yields the remainder r after the division of the operand a by n
     
-    exponentiation
-      only available for unsigned types in the exponent
-      resulting type of an exponentiation is always equal to the type of the base
+**exponentiation**  
+only available for unsigned types in the exponent
 
-      exp opcode is cheap
-      x**3 the expression x*x*x might be cheaper
+resulting type of an exponentiation is always equal to the type of the base
+
+exp opcode is cheap
+
+x**3 the expression x*x*x might be cheaper
     
-  ## fixed point numbers
+### **fixed point numbers**
 
-    not fully supported. can be declared but can't be assigned to or from
+not fully supported. can be declared but can't be assigned to or from
 
-    fixed and ufixed keywords
+fixed and ufixed keywords
 
-    ufixedMxN fixedMxN
-    M represents number of bits taken by the type
-    N represents how many decimal points are available
-    M must be divisible by 8 as it goes from 8-256
-    N must be between 0-80 inclusive
-    ufixed and fixed are aliases to ufixed128x18 and fixed128x18
+- ufixedMxN fixedMxN
+- M represents number of bits taken by the type
+- N represents how many decimal points are available
+- M must be divisible by 8 as it goes from 8-256
+- N must be between 0-80 inclusive
+- ufixed and fixed are aliases to ufixed128x18 and fixed128x18
   
-  ## address
-    address
-      holds a 20 byte value 
-      can be a smart contract that doesn't accept ether
-    address payable 
-      has additional members transfer and send
-      can send ether to
+### **address**
+
+- address  
+holds a 20 byte value   
+can be a smart contract that doesn't accept ether  
+
+- address payable   
+has additional members transfer and send  
+can send ether to  
     
-    difference introduced in 0.5.0
+difference introduced in 0.5.0
     
-    type conversions
-      implicit conversion
-        of address payable to address is allowed
+**type conversions**
 
-        address to payable must be explicit via payable(<address>)
+- **implicit conversion**  
+of address payable to address is allowed
+address to payable must be explicit via payable(\<address>)  
 
-      explicit conversions
-        to and from address are allowed for 
-          uint160
-          integer literals
-          bytes20
-          contracts
+- **explicit conversions**  
+to and from address are allowed for 
+  - uint160
+  - integer literals
+  - bytes20
+  - contracts
 
-      only expressions of address and contract type can be converted to address payable via payable(...)
+only expressions of address and contract type can be converted to address payable via payable(...)
 
-      contracts need to be allowed to receive ether via receive or a payable fallback function to be converted to address payable
+contracts need to be allowed to receive ether via receive or a payable fallback function to be converted to address payable
 
-      payable(0) exception
+payable(0) exception
 
-      converting large byte size(byte32) to an address, would truncate the address. 
+converting large byte size(byte32) to an address, would truncate the address. 
     
-    members of addresses
+**members of addresses**
       
-      properties/methods of addresses 
+properties/methods of addresses 
 
-      balance
-        queries the balance of an address
-      transfer
-        sends ether in wei to a payable address 
-        fails if balance of contract is less than input
-      send
-        low-level transfer
-        current contract execution doesn't stop with an exception but returns false
+`balance`
+queries the balance of an address
+
+`transfer`
+sends ether in wei to a payable address   
+fails if balance of contract is less than input  
+`send`
+low-level transfer  
+current contract execution doesn't stop with an exception but returns false
       
-      call
-      delegatecall
-        the purpose of delegate call is to use library code that is stored in another contract
-        layout in storage in both contracts should be suitable
-      staticcall
-        same as call but it will revert if the called function modifies state
-        take a single bytes memory parameter and returns
-          success condition as boolean
-          returned data (bytes memory)
+`call`
+`delegatecall`
+the purpose of delegate call is to use library code that is stored in another contract
+
+layout in storage in both contracts should be suitable
+
+`staticcall`
+same as call but it will revert if the called function modifies state.
+
+take a single bytes memory parameter and returns
+- success condition as boolean
+- returned data (bytes memory)
       
-      call, delegatecall and staticcall are low-level and should only be used as last resort
+call, delegatecall and staticcall are low-level and should only be used as last resort
   
-  ## contract types
+### **contract types**
 
-    contracts define their own type
+contracts define their own type
 
-    implicit conversion of contracts through inheritance
+implicit conversion of contracts through inheritance
 
-    explicit convrsion to and from address payable if contract has a receive  or payable fallback funcion
+explicit convrsion to and from address payable if contract has a receive  or payable fallback funcion
 
-    before 0.5.0 contracts directly derived from the address type so there was no distinction between address and payable
+before 0.5.0 contracts directly derived from the address type so there was no distinction between address and payable
 
-    contracts do not support any operators
+contracts do not support any operators
 
-    members of contracts are external functions of the contract including public state variables
+members of contracts are external functions of the contract including public state variables
 
-  ## fixed-size byte arrays
+### ** fixed-size byte arrays**
 
-    bytes1, bytes2, bytes, ...bytes32
-      hold a sequence of bytes from one up to 32
+bytes1, bytes2, bytes, ...bytes32
+
+hold a sequence of bytes from one up to 32
     
-    operators
-      comparison <= < == != >= > evaluate to boolean
-      bit operators & | ^(bitwise exclusive or) ~(bitwise negation)
-      shift operators << >>
-        work wih uint as right operand and returns the type of the left operand
-        denotes the number of bits to shift by 
-        shifting by an int will produce a compilation error
-      index access
-        if x is bytesI
-        for 0 <= k < I 
-        returns the {k}-th byte (read-only)
+**operators**
+
+**comparison** <= < == != >= > evaluate to boolean
+
+**bit operators** & | ^(bitwise exclusive or) ~(bitwise negation)
+
+**shift operators << >>**
+
+work wih uint as right operand and returns the type of the left operand
+
+denotes the number of bits to shift by 
+
+shifting by an int will produce a compilation error
+      
+index access
+
+if x is bytesI
+
+for 0 <= k < I 
+
+returns the {k}-th byte (read-only)
   
-  ## dynamically-sized byte arrays
+### **dynamically-sized byte arrays**
 
-    bytes
-      dynamically-sized byte array, not a value type
-    string
-      dynamically-sized UTF-8 encoding string, not a value type
+- **bytes**
+dynamically-sized byte array, not a value type
+
+- **string**
+dynamically-sized UTF-8 encoding string, not a value type
     
-  ## address literals
+### **address literals**
 
-    hexadecimal literals that pass the address checksum test
-    some between 39 and 41 digits do not pass checksum test
-    prepend zero(for integer typep)
-    append zero for bytesNN types
+hexadecimal literals that pass the address checksum test
 
-  ## rational and integer literals
+some between 39 and 41 digits do not pass checksum test
 
-    integer literals are formed from a sequence of digits in the range 0-9
+prepend zero(for integer typep)
 
-    octal literals do not exist in solidity 
+append zero for bytesNN types
 
-    decimal fractional literals are formed by a . 1.3
+### **rational and integer literals**
 
-    scientific notation like 2e10 is supported, the mantissa can be fractional but exponent has to be integer
+integer literals are formed from a sequence of digits in the range 0-9
 
-    literal MeE is equivalent to M * 10**E
+octal literals do not exist in solidity 
 
-    123,000 literal can be written 
-    underscores 123_000 
-    hexadecimal 0x2eff_abde
-    scientific decimal 1_2e345_678
+decimal fractional literals are formed by a . 1.3
 
-    number literals retain arbitrary precision until converted to a non-literal type, computations do not overflow and divisions do not truncate in number literal expressions
+scientific notation like 2e10 is supported, the mantissa can be fractional but exponent has to be integer
 
-    (2**800 + 1) - 2**800
-      results in 1 (type uint8)
+literal MeE is equivalent to M * 10**E
+
+123,000 literal can be written 
+underscores 123_000 
+hexadecimal 0x2eff_abde
+scientific decimal 1_2e345_678
+
+number literals retain arbitrary precision until converted to a non-literal type, computations do not overflow and divisions do not truncate in number literal expressions
+
+(2\**800 + 1) - 2**800
+
+results in 1 (type uint8)
     
-    most operators produce a literal expression except ternary operator and array subscript
+most operators produce a literal expression except ternary operator and array subscript
 
-      255 + (true ? 1 : 0) 
-      255 + [1, 2, 3][0]
-      should be 256
-      but they are computed with uint8 so can overflow
+255 + (true ? 1 : 0)   
+255 + [1, 2, 3][0]  
+should be 256  
+but they are computed with uint8 so can overflow  
     
-    bitwise operations are not allowed if any of the two operands is fractional
-    exponentiation is not allowed if exponent is fractional 
-    shift and exponentiation with literals as base (left) and integer as exponent (right) are always performed in uint256 or int256 for negative literals
+bitwise operations are not allowed if any of the two operands is fractional
+
+exponentiation is not allowed if exponent is fractional 
+
+shift and exponentiation with literals as base (left) and integer as exponent (right) are always performed in uint256 or int256 for negative literals
   
-  ## string literals and types
+### **string literals and types**
 
-    string literals are written with double or single quotes
-    they are implicitly convertible to bytes1...32
+string literals are written with double or single quotes
 
-    string literals support escaoe characters
-      \<newline>
-      \\
-      \'
-      \"
-      ...etc
+they are implicitly convertible to bytes1...32
+
+string literals support escaoe characters
+- \<newline>
+- \\
+- \'
+- \"
+- ...etc
     
-    string literals can only contain ASCII characters
-    bewteen 0x20 including 0x7E
+string literals can only contain ASCII characters
 
-  ## unicode literals
+bewteen 0x20 including 0x7E
 
-    prefixed with the word unicode
-    can contain UTF-8 sequences
-    support regular escape sequences
+### **unicode literals**
 
-  ## hexadecimal literals
+- prefixed with the word unicode
+- can contain UTF-8 sequences
+- support regular escape 
 
-    prefixed with the keyword hex
-    enclosed in single or double quotes
+### **hexadecimal literals**
+
+prefixed with the keyword hex
+
+enclosed in single or double quotes
   
-  ## enums
+### **enums**
 
-    way to create user-defined types
-    explicitly convertible to and from all integer types
-    implicit conversion is not allowed
+way to create user-defined types
 
-    at runtime, explicit conversion checks if the value is inside the range of an enum, causes a panic error otherwise
+explicitly convertible to and from all integer types
 
-    default value when declared is the first member
-    can't have more than 256 members
+implicit conversion is not allowed
 
-  ## user defined value types
+at runtime, explicit conversion checks if the value is inside the range of an enum, causes a panic error otherwise.
 
-    similar to an alias but with stricter type requirements
+default value when declared is the first member
 
-    type C is V
-    C name of the new type
-    V underlying built-in type
-    C.wrap converts underlying to custom type
-    C.unwrap convers from custom to underlying type
+can't have more than 256 members
 
-  ## function types
+### **user defined value types**
 
-    variable function
-    function parameter
+similar to an alias but with stricter type requirements
 
-    internal 
-      can only be called inside the currenct contract, current code unit
-    external 
-      consist of an address and a function signature can be passed and returned from external function calls
+type C is V  
+C name of the new type  
+V underlying built-in type  
+C.wrap converts underlying to custom type  
+C.unwrap convers from custom to underlying type  
+
+### **function types**
+
+variable function
+
+function parameter
+
+- **internal** 
+can only be called inside the currenct contract, current code unit
+- **external** 
+consist of an address and a function signature can be passed and returned from external function calls
     
-    function (<parameter types>) {internal|external} [pure|view|payable] [returns (<return types>)]
+`function (<parameter types>) {internal|external} [pure|view|payable] [returns (<return types>)]`
 
-    return type can't be empty
-    if function should not return anything, the statement has to be omitted
+return type can't be empty
 
-    functions are internal by default, internal keyword can be omitted
+if function should not return anything, the statement has to be omitted
 
-    visibility has no default, has to be explicitly set
+functions are internal by default, internal keyword can be omitted
 
-    conversions
+visibility has no default, has to be explicitly set
 
-      implicit conversion only if they both have identical
-        parameter types
-        return types 
-        internal/external property
-        and state mutability of A is more restrictive than B
+**conversions**
+
+implicit conversion only if they both have identical
+- parameter types
+- return types 
+- internal/external property
+- and state mutability of A is more restrictive than B
       
-      no other conversion is possible
+> no other conversion is possible
     
-    if a function is payable, it also accepts a payment of zero ether
+if a function is payable, it also accepts a payment of zero ether.
 
-    non-payable function rejects ether sent to it, can't be converted to payable function
+non-payable function rejects ether sent to it, can't be converted to payable function.
 
-    if a function type variable is not initialised, calling it results in panic error, same if calling a recently deleted function
+if a function type variable is not initialised, calling it results in panic error, same if calling a recently deleted function.
 
-    an external function type used outside of solidity encodes the address and the function identifier in a single bytes24 type
+an external function type used outside of solidity encodes the address and the function identifier in a single bytes24 type.
 
-    an internal function can be assigned to a variable of  an internal function regardless of where its defined, includes private, internal, public functions 
+an internal function can be assigned to a variable of  an internal function regardless of where its defined, includes private, internal, public functions 
 
-    external functions are only compatible with public and external contract functions
+external functions are only compatible with public and external contract functions.
 
-    members
+**members**
 
-      for external or public functions
-        .address
-          returns address of the contract
-        .selector
-          returns ABI function selector
+for external or public functions
 
-        .gas(uint) and .value(uint) were removed in 0.7.0 now {gas: ..., value: ...} can be used
+`.address`
+  returns address of the contract
 
-  ## reference types
+`.selector`
+  returns ABI function selector
 
-    value types you get an intependent copy whenever a variable is used
+  `.gas(uint)` and `.value(uint)` were removed in 0.7.0 now `{gas: ..., value: ...}` can be used
 
-    reference types can be modified through different names
+### **reference types**
 
-    structs
-    arrays
-    mappings are reference types
+value types you get an intependent copy whenever a variable is used
 
-    always explicitly provide data area where the type is stored
-      memory where lifetime is short
-      storage for long term
+reference types can be modified through different names
+
+- structs
+- arrays
+- mappings are reference types
+
+always explicitly provide data area where the type is stored
+- memory where lifetime is short
+- storage for long term
     
-  ## data location
+### **data location**
 
-    data location is an additional annotation in reference types
+data location is an additional annotation in reference types
     
-    three data locations
-      memory
-      storage
-      calldata
-        non-modifiable non-persistent where function arguments are stored, behaves like memory
-        it avoids copies and makes sure the data is immutable
-        arrays and structs with calldata can also be returned from functions
+three data locations
+- **memory**
+- **storage**
+- **calldata**  
+non-modifiable non-persistent where function arguments are stored, behaves like memory.  
+it avoids copies and makes sure the data is immutable.  
+arrays and structs with calldata can also be returned from functions.  
+after 0.6.9 memory and calldata are allowed in functions regardless of their visibility.  
+
+after 0.5.0 data location could be omitted, but now all complex types must give an explicit data location
+
+assignments between storage and memory always create an independent copy
+
+assignments from memory to memory only create references
+
+changes to one memory variable are visible in other memory variables that refer to the same data
+
+assignments from storage to local variable only assign a reference
+
+other assignments to storage always copy
+
+### **arrays**
+
+can have a compile-time fixed size or can be dynamic
+
+type of fixed array k and element type `T` is `T[k]`
+
+array of dynamic size is `T[]`
+
+an array of five dynamic arrays of uint 
+`uint[][5]`
+    
+`X[3]`
+array containing three elements of type `X`, even if `X` is an array (not like in C)
+    
+indices are zero-based
+
+access is opposite direction of declaration
+`uint[][5] memory x`
+
+access seventh uint in the third dynamic array 
+`x[2][6]`
+
+to access third dynamic array
+`x[2]`
+    
+`T[5] a` 
+for a type `T`, then a[2] always has type `T`
+    
+> mappings can only be stored in storage
+
+array elements can be any type
+
+publicly visible functions need parameters that are ABI types.
+
+possible to mark state variable arrays public and solidity create a getter, numeric index becomes a required parameter for the getter
+
+**bytes and string as arrays**
+
+bytes and string are special arrays
+
+bytes is similar to bytes1[], packed tightly in calldata and memory.
+
+string is equal to bytes but doesn't allow length or index access
+
+solidity doesn't have built-in string manipulation functions but there are libraries.
+
+strings can be compared using their keccak256-hash
+
+`keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2))`
       
-      after 0.6.9 memory and calldata are allowed in functions regardless of their visibility
+`bytes` are preferred over `bytes1[]`
 
-      after 0.5.0 data location could be omitted, but now all complex types must give an explicit data location
+`bytes1[]` has to be stored in memory, adds 31 padding bytes between elements
 
-    assignments between storage and memory always create an independent copy
+in storage, padding is absent
 
-    assignments from memory to memory only create references
-    changes to one memory variable are visible in other memory variables that refer to the same data
+bytes are good for arbitrary-length raw byte data
 
-    assignments from storage to local variable only assign a reference
+string for arbitrary-length string UTF-8 data
 
-    other assignments to storage always copy
+if length can be limited to a certain number of bytes, bytes1...32 are cheaper
 
-  ## arrays
+`byte.concat string.concat`
 
-    can have a compile-time fixed size or can be dynamic
+concatenate arbitrary number of string  and bytes values
 
-    type of fixed array k and element type T is T[k]
-    array of dynamic size is T[]
+return a single string memory or bytesmemory array containing arugments without padding
 
-    an array of five dynamic arrays of uint 
-      uint[][5]
+if parameters of other types have to be used, they need to be converted to either string or bytes first
+
+bytes1...bytes32
     
-    X[3]
-      array containing three elements of type X, even if X is an array (not like in C)
+**allocating memory arrays**
+
+dynamic length arrays created using new operator
+
+is not possible to resize memory arrays
+
+push member function is not available
     
-    indices are zero-based
+**array literals**
 
-    access is opposite direction of declaration
-      uint[][5] memory x
-      access seventh uint in the third dynamic array 
-        x[2][6]
-      to access third dynamic array
-        x[2]
+`[...]`
+`[1, a, f(3)]`
+
+it is statically-sized memory array whose length is the number of expressions
+
+base type of the array is the type of the first expression on the list, other expressions are implicitly converted to it. Type error if implicit conversion can't be completed.
+
+type of `[1, 2, 3]` is `uint8[3]` memory
+
+the type of these constants is uint8
+
+`[1, -1]` array literal is invalid because they can't implicitly convert to each other
+
+fixed size memory arrays can't be assigned to dynamically sized memory arrays
+
+**array members**
+
+`length`
+contains the number of elements
+length of memory array is fixed, but dynamic can depend on runtime parameters
+
+`push()`
+member of dynamic storage arrays and bytes (not string), appends a zero-initialised element at the end of the array
+
+returns a reference to the element
+
+increasing the length of a storage array has constant gas costs
+
+`push(x)`
+dynamic storage arrays and bytes have it
+
+function returns nothing
+
+`pop()`
+dynamic storage arrays and bytes have it
+
+remove an element from the end of the array
+
+implicitly calls delete on the removed element
+
+returns nothing
+
+decreasing the length has a cost depends on the size of the element being removed
+
+**dangling references**
+
+reference that point to something that no longer exists or has been moved without updating the reference
+
+happens if an array element reference is stored in a variable and then later .pop() that element from the array source.
+
+a `.push()` on a bytes array may switch from short to long layout in storage
+
+dangling references must be avoided.
     
-    t[5] a 
-      for a type T, then a[2] always has type T
-    
-    mappings can only be stored in storage
+**array slices**
 
-    array elements can be any type
+`x[start:end]`
+start and end are expressions resulting in a uint256 type
 
-    publicly visible functions need parameters that are ABI types
+first element is `x[start]`  
+last element is `x[end-1]`
 
-    possible to mark state variable arrays public and solidity create a getter, numeric index becomes a required parameter for the getter
+if start is greater than end or end greater than length of the array, an exception is thrown.
 
-    bytes and string as arrays
+> unlike `array.slice()` in js for example, array slices in solidity are a type of array?
 
-      bytes and string are special arrays
-      bytes is similar to bytes1[], packed tightly in calldata and memory
-      string is equal to bytes but doesn't allow length or index access
+start defaults to 0 and end defaults to the length of the array
 
-      solidity doesn't have built-in string manipulation functions but there are libraries
+don't have any members
 
-      strings can be compared using their keccak256-hash
-        keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2))
+implicitly convertible to arrays
       
-      bytes are preferred over bytes1[]
-      bytes1[] has to be stored in memory, adds 31 padding bytes between elements
-      in storage, padding is absent
+index access is relative to the start of the slice.
 
-      bytes are good for arbitrary-length raw byte data
-      string for arbitrary-length string UTF-8 data
+array slices don't have a type name.
 
-      if length can be limited to a certain number of bytes, bytes1...32 are cheaper
+only implemented for calldata arrays as of now
 
-    byte.concat string.concat
+useful to decode secondary data passed in function parameters
 
-      concatenate arbitrary number of string  and bytes values
+### **structs**
 
-      return a single string memory or bytesmemory array containing arugments without padding
+define new types.
 
-      if parameters of other types have to be used, they need to be converted to either string or bytes first
+can be used inside mappings and arrays.
 
-      bytes1...bytes32
+they can contain mappings and arrays.
+
+a struct can't contain a member of its own type. So no nested structs.
+
+the size of the struct has to be finite.
+
+the struct can be the value type of a mapping member or can contain a dynamically-sized array of its type.
+
+### **mapping types**
+
+`mapping(keyType => valueType)`
+
+variables of mapping type 
+
+`mapping(keyType => ValueType) variableName`
     
-    allocating memory arrays
+keyType can be any built-in value type
 
-      dynamic length arrays created using new operator
-      is not possible to resize memory arrays
-      push member function is not available
+complex types are not allowed (mappings, arrays, structs)
+
+mappings are hash tables
+
+virtually initialized so every possible key, is mapped to a value whose byte-representation is all zeros and a type's default value
+
+only the keccak256 hash is used to lookup the value
+
+keydata is not stored in a mapping
+
+mappings don't have a length or a concept of a key or value being set
+
+cannot be erased without extra information regarding the assigned keys
+
+can only be located in storage
+
+can't be used as parameters or return parameters
+
+restrictions apply for arrays and structs that contain mapping
+
+marking state variables of mapping type as public, solidity creates a getter for you
+
+keyType becomes a parameter for the getter
+
+iterable mappings
+
+can't iterate over mappings, cant enumerate their keys
+
+it is possible to create a data structure on top of mappings and iterate over that.
+
+### **operators**
+
+arithmetic and bit operators can be applied even if the operans don't have the same type
+
+to determine what type the operation will use
+
+- if the right operand type can be implicitly converted to the left, use left.
+
+- if the left operand type can be implicitly converted to the right, use the right
+
+- otherwise, operation is not allowed
     
-    array literals
+a literal number is converted to its mobile type, smallest type that can hold the value 
 
-      [...]
-      [1, a, f(3)]
+if both are literal numbers, the operation will evaluate with as much precision as necessary
 
-      it is statically-sized memory array whose length is the number of expressions
+**ternary operator**
 
-      base type of the array is the type of the first expression on the list, other expressions are implicitly converted to it. Type error if implicit conversion can't be completed
-
-      type of [1, 2, 3] is uint8[3] memory
-      the type of these constants is uint8
-
-      [1, -1] array literal is invalid because they can't implicitly convert to each other
-
-      fixed size memory arrays can't be assigned to dynamically sized memory arrays
-
-    array members
-
-      length
-        contains the number of elements
-        length of memory array is fixed, but dynamic can depend on runtime parameters
-      push()
-        member of dynamic storage arrays and bytes (not string), appends a zero-initialised element at the end of the array
-        returns a reference to the element
-        increasing the length of a storage array has constant gas costs
-      push(x)
-        dynamic storage arrays and bytes have it
-        function returns nothing
-      pop()
-        dynamic storage arrays and bytes have it
-        remove an element from the end of the array
-        implicitly calls delete on the removed element
-        returns nothing
-        decreasing the length has a cost depends on the size of the element being removed
-
-    dangling references
-
-      reference that point to something that no longer exists or has been moved without updating the reference
-
-      done if an array element reference is stored in a variable and then later .pop() an element from the array
-
-      a .push() on a bytes array may switch from short to long layout in storage
-
-      dangling references must be avoided
+`<expression> ? <trueExpression> : <falseExpression>`
     
-    array slices
-
-      x[start:end]
-      start and end are expressions resulting in a uint256 type
-
-      first element is x[start]
-      last element is x[end-1]
-
-      if start is greater than end or end greater than length of the array, an exception is thrown
-
-      start defaults to 0 and end defaults to the length of the array
-
-      don't have any members
-
-      implicitly convertible to arrays
+result type is not determined from the types of the operands
       
-      index access is relative to the start of the slice
+`255 + (true ? 1 : 0)` will revert due to arithmetic overflow
 
-      array slices don't' have a type name
+ternary operator is of uint8 type, and 256 exceeds that range
 
-      only implemented for calldata arrays as of now
+1.5 + 1.5 is fine (rational expression evaluated with unlimited precision)
 
-      useful to decode secondary data passed in function parameters
-
-  ## structs
-
-    define new types
-
-    can be used inside mappings and arrays
-    they can contain mappings and arrays
-
-    a struct can't contain a member of its own type
-    the size of the struct has to be finite
-    the struct can be the value type of a mapping member or can contain a dynamically-sized array of its type
-
-  ## mapping types
-
-    mapping(keyType => valueType)
-
-    variables of mapping type 
-      mapping(keyType => ValueType) variableName
+1.5 + (true ? 1.5 : 2.5) involves converting a fractional rational number to an integer, which is not allowed
     
-    keyType can be any built-in value type
-    complex types are not allowed (mappings, arrays, structs)
+**compound increment/decrement operators**
 
-    mappings are hash tables
-    virtually initialized so every possible key, is mapped to a value whose byte-representation is all zeros and a type's default value
+if a is an LValue (something that can be assigned to)
 
-    only the keccak256 hash is used to lookup the value
-    keydata is not stored in a mapping
+- a += e
+- a -= e
+- a *= e
+- a /= e
+- a |= e
 
-    mappings don't have a length or a concept of a key or value being set
+**delete**  
+used on arrays can assign a dynamic array of length zero with all elements set to initial value
 
-    cannot be erased without extra information regarding the assigned keys
-
-    can only be located in storage
-    can't be used as parameters or return parameters
-    restrictions apply for arrays and structs that contain mapping
-
-    marking state variables of mapping type as public, solidity creates a getter for you
-    keyType becomes a parameter for the getter
-
-    iterable mappings
-
-      can't iterate over mappings, cant enumerate their keys
-
-      it is possible to create a data structure on top of mappings and iterate over that
-
-  ## operators
-
-    arithmetic and bit operators can be applied even if the operans don't have the same type
-
-    to determine what type the operation will use
-
-      if the right operand type can be implicitly converted to the left, use left
-
-      if the left operand type can be implicitly converted to the right, use the right
-
-      otherwise, operation is not allowed
-    
-    a literal number is converted to its mobile type, smallest type that can hold the value 
-
-    if both are literal numbers, the operation will evaluate with as much precision as necessary
-
-    ternary operator
-      <expression> ? <trueExpression> : <falseExpression>
-    
-      result type is not determined from the types of the operands
-      
-      255 + (true ? 1 : 0) will revert due to arithmetic overflow
-      ternary operator is of uint8 type, and 256 exceeds that range
-
-      1.5 + 1.5 is fine (rational expression evaluated with unlimited precision)
-
-      1.5 + (true ? 1.5 : 2.5) involves converting a fractional rational number to an integer, which is not allowed
-    
-    compound increment/decrement operators
-
-      if a is an LValue (something that can be assigned to)
-
-      a += e
-      a -= e
-      a *= e
-      a /= e
-      a |= e
-
-    delete
-      used on arrays can assign a dynamic array of length zero with all elements set to initial value
-
-      delete leaves an empty space in the array 
+delete leaves an empty space in the array 
   
-  ## conversion between elementary types
+### **conversion between elementary types**
 
-    implicity conversions
-      automatically appliced by the compiler
-      possible between value types if it makes sense semantically and information is not lost
+**implicity conversions**
+automatically appliced by the compiler
 
-      uint8 convertible to uint16, int128 but not to uint256
+possible between value types if it makes sense semantically and information is not lost
 
-    explicit conversions
-      may result in unexpected behavior and allows to bypass some security features of the compiler
+uint8 convertible to uint16, int128 but not to uint256
 
-      if an integer is explicitly converted to a smaller type, higher-order bits are cut off
+**explicit conversions**
 
-      if an integer is explicitly converted to a larger type, the result will compare equal to the original integer
+may result in unexpected behavior and allows to bypass some security features of the compiler
 
-      fixe-sized bytes convert to a smaller type will cut off the sequences of individual bytes 
+if an integer is explicitly converted to a smaller type, higher-order bits are cut off.
 
-      fixed-sized bytes converted to a larger type, is padded on the right
+if an integer is explicitly converted to a larger type, the result will compare equal to the original integer.
 
-      explicit conversions between integers and fixed-size byte arrays are only allowed if both have the same size
+fixed-sized bytes convert to a smaller type will cut off the sequences of individual bytes 
 
-      bytes arrays and bytes calldata slices can be converted explicitly to fixed bytes types (bytes1...bytes32)
+fixed-sized bytes converted to a larger type, is padded on the right
 
-      if array is longer than the target fixed bytes type, the array will be truncated
+explicit conversions between integers and fixed-size byte arrays are only allowed if both have the same size
 
-      if array is shorter than the target type, it will be padded with zeros at the end
+bytes arrays and bytes calldata slices can be converted explicitly to fixed bytes types (`bytes1...bytes32`).
+
+if array is longer than the target fixed bytes type, the array will be truncated
+
+if array is shorter than the target type, it will be padded with zeros at the end
     
-  ## conversions between literals and elementary types
+### **conversions between literals and elementary types**
 
-    integer types
-      decimal and hexadecimal literals can be implicitly converted to any integer type large enough to represent the literals without truncation
+- **integer types**
+decimal and hexadecimal literals can be implicitly converted to any integer type large enough to represent the literals without truncation
     
-    fixed-size byte arrays
-      decimal literals can't be implicitly converted to fixed-size byte arrays
+- **fixed-size byte arrays**
+decimal literals can't be implicitly converted to fixed-size byte arrays.  
+hexadecimal literals can be implicitly converted only if the number fits the size of the bytes type exactly.
 
-      hexadecimal literals can be implicitly converted only if the number fits the size of the bytes type exactly
+## **units and globally available variables**
 
-# units and globally available variables
+### **ether units**
 
-  ## ether units
-
-    a literal number can have different suffixes
-      wei
-      gwei
-      ether
+a literal number can have different suffixes
+- wei
+- gwei
+- ether
     
-    a number without a postfix is assumed to be in wei denomination
+a number without a postfix is assumed to be in wei denomination
 
-    finney and szabo denominations have been removed in version 0.7.0
+finney and szabo denominations have been removed in version 0.7.0.
 
-  ## time units
+### **time units**
 
-    seconds, minutes, hours, days, weeks after literal numbers can specify units of time
+seconds, minutes, hours, days, weeks after literal numbers can specify units of time
 
-    1 == 1 seconds
-    1 minutes == 60 seconds
-    1 hours == 60 minutes
-    1 days == 24 hours
-    1 weeks == 7 days
+1 == 1 seconds
+1 minutes == 60 seconds
+1 hours == 60 minutes
+1 days == 24 hours
+1 weeks == 7 days
 
-    due to the fact that leap seconds can't be predicted, an exact calendar library has to be updated by an external oracle
+due to the fact that leap seconds can't be predicted, an exact calendar library has to be updated by an external oracle
 
-    function f(uint start, uint daysAfter) public {
-      if (block.timestamp >= start + daysAfter * 1 days){
-        block of code
-      }
-    }
+```sol
+function f(uint start, uint daysAfter) public {
+  if (block.timestamp >= start + daysAfter * 1 days){
+    block of code
+  }
+}
+```
 
-  ## special variables and functions
+### **special variables and functions**
 
-    exist in the global namespace and provide information about the blockchain 
+exist in the global namespace and provide information about the blockchain.
 
-    block and transaction properties
+**block and transaction properties**
 
-      blockhash(uint blockNumber) returns (bytes32)
-        hash of the given block when blockNumber is one of the 256 most recent blocks, returns 0 otherwise
-      block.basefee
-        uint, current block's base fee
-      block.chainid
-        uint, current chain id
-      block.coinbase
-        address payable, current block miner's address
-      block.difficulty
-        uint,  current block difficulty
-      block.gaslimit
-        uint, current block gaslimit
-      block.number
-        uint,
-      block.timestamp
-        uint, block timestamp as seconds since unix epoch
-      gasleft() returns (uint256)
-        remaining gas
-      msg.data
-        bytes  calldata, complete calldata
-      msg.sender
-        address, sender of the message (current call)
-      msg.sig
-        bytes4, first four bytes of the calldata(function identifier)
-      msg.value
-        uint, number of wei sent with the message
-      tx.gasprice
-        uint,
-      tx.origin
-        address, sender of the transaction
+`blockhash(uint blockNumber) returns (bytes32)`
+hash of the given block when blockNumber is one of the 256 most recent blocks, returns 0 otherwise.
+
+`block.basefee`
+  uint, current block's base fee
+
+`block.chainid`
+  uint, current chain id
+
+`block.coinbase`
+  address payable, current block miner's address
+
+`block.difficulty`
+uint,  current block difficulty
+
+`block.gaslimit`
+uint, current block gaslimit
+
+`block.number`
+uint,
+
+`block.timestamp`
+uint, block timestamp as seconds since unix epoch
+
+`gasleft() returns (uint256)`
+remaining gas
+
+`msg.data`
+bytes  calldata, complete calldata
+
+`msg.sender`
+address, sender of the message (current call)
+
+`msg.sig`
+bytes4, first four bytes of the calldata(function identifier)
+
+`msg.value`
+uint, number of wei sent with the message
+
+`tx.gasprice`
+uint,
+
+`tx.origin`
+address, sender of the transaction
+
     
-    ABI encoding and decoding functions
+**ABI encoding and decoding functions**
 
-      abi.decode(bytes memory encodedData, (...)) returns (...)
-        ABI decodes given data while types are given as second argument
-        (uint a, uint[2] memory b, bytes
-      abi.encode(...) returns (bytes memory)
-      abi.encodePacked(...) returns (bytes memory)
-      abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)
-        abi encodes the given arguments from the second and preprends the given four-byte selector
+`abi.decode(bytes memory encodedData, (...)) returns (...)`
+ABI decodes given data while types are given as second argument
+
+`(uint a, uint[2] memory b, bytes`  
+
+`abi.encode(...) returns (bytes memory)`
+
+`abi.encodePacked(...) returns (bytes memory)`
+  
+`abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)`
+
+abi encodes the given arguments from the second and preprends the given four-byte selector
     
-    error handling
-      assert(bool condition)
-        causes a panic error if condition is false
-      require(bool condition)
-        reverts if condition is not met
-      require(bool condition string memory message)
-        reverts if condition is not met
-      revert()
-        abort execution and revert state changes
-      rever(string memory reason)
-        abort execution and revert state changes, providing explanatory string
+**error handling**
+
+`assert(bool condition)`
+causes a panic error if condition is false
+`require(bool condition)`
+reverts if condition is not met
+
+`require(bool condition string memory message)`
+reverts if condition is not met
+
+`revert()`
+  abort execution and revert state changes
+
+`revert(string memory reason)`
+abort execution and revert state changes, providing explanatory string
     
-    mathematical and cryptographic functions
+**mathematical and cryptographic functions**
 
-      addmod(uint x, uint y, uint k) returns (uint)
-        compute (x + y) % k
-      mulmod(uint x, uint y, uint k) returns (uint)
-        compute (x * y) % k
-      keccak256(bytes memory) returns (bytes32)
-        compute keccak-256 hash of the input
-      sha256(bytes memory) returns (bytes20)
-      ripemd160(bytes memory) returns (bytes20)
-      ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) returns (address)
-        recovers address associated with public key from elliptic curve signature
+`addmod(uint x, uint y, uint k) returns (uint)`
+compute (x + y) % k
 
-        returns address, not address payable
+`mulmod(uint x, uint y, uint k) returns (uint)`
+compute (x * y) % k
 
-        r first 32 bytes
-        s second 32 bytes 
-        v final 1 byte of signature
+`keccak256(bytes memory) returns (bytes32)`
+compute keccak-256 hash of the input
+
+`sha256(bytes memory) returns (bytes20)`  
+
+`ripemd160(bytes memory) returns (bytes20)` 
+
+`ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) returns (address)`  
+recovers address associated with public key from elliptic curve signature
+
+returns address, not address payable
+
+- ***r*** first 32 bytes
+- ***s*** second 32 bytes 
+- ***v*** final 1 byte of signature
       
-      when these functions are run on a private blockchain out-of-gas problem might happen, functions are implemented as precompiled contracts and only exist after they receive the first message, so first sind wei to each contract before you use them.
+when these functions are run on a private blockchain out-of-gas problem might happen, functions are implemented as precompiled contracts and only exist after they receive the first message, so first sind wei to each contract before you use them.
     
-    contract related
-      this
-        the current contract, explicitly convertible to address
-      selfdestruct(address payable recipient)
+**contract related**
 
-    type information
-      type(x) retrieves information about the type x
-      x can be either a contract or integer type
+***this***
+the current contract, explicitly convertible to address
+
+selfdestruct(address payable recipient)
+
+**type information**
+
+`type(x)` retrieves information about the type x
+
+x can be either a contract or integer type
     
-    contracts
-    type(C).name
-    type(C).creationCode
-    type(C).runtimeCode
-    type(C).interfaceId
+**contracts**
+- type(C).name
+- type(C).creationCode
+- type(C).runtimeCode
+- type(C).interfaceId
 
-    integers
-    type(T).min
-    type(T).max 
+**integers**
+- type(T).min  
+- type(T).max 
 
-    members
+**members/methods**
 
-      bytes
-        bytes.concat(...) returns (bytes memory)
+**bytes**  
+`bytes.concat(...) returns (bytes memory)`
 
-        concatenates variable number of bytes and bytes1...bytes32 arguments to one byte array
-      strings
-        string.concat(...) returns (string memory)
+concatenates variable number of `bytes` and `bytes1`...`bytes32` arguments to one byte array
 
-        concatenates variable number of string arguments to one string array
+**strings**  
+`string.concat(...) returns (string memory)`
 
-      address
-        <address>.balance (uint26)
-        balance of the address in wei
+concatenates variable number of string arguments to one string array
 
-        <address>.code (bytes memory)
-        code at the address, can be empty for EOA
+**address**
+`<address>.balance (uint26)`
+balance of the address in wei
+
+`<address>.code (bytes memory)`
+code at the address, can be empty for EOA
         
-        <address>.codehas (bytes32)
-        code hash of address
+`<address>.codehas (bytes32)`
+code hash of address
 
-        <address payable>.transfer (uint256 amount) 
-        send wei to address, reverts on failure, forwards 2300 gas stipend 
+`<address payable>.transfer (uint256 amount) `
+send wei to address, reverts on failure, forwards 2300 gas stipend 
 
-        <address payable>.send(uint256 amount) returns (bool)
-        similar to .transfer
+`<address payable>.send(uint256 amount) returns (bool)`
+similar to `.transfer`
         
-        <address>.call(bytes memory) returns (bool, bytes memory)
-        issues a low-level CALL with given payload, returns success condition and return data, forwards all available gas, adjustable
+`<address>.call(bytes memory) returns (bool, bytes memory)`
+issues a low-level CALL with given payload, returns success condition and return data, forwards all available gas, adjustable.
 
-        <address>.delegatecall(bytes memory) returns (bool, bytes memory)
-        issues low-level DELEGATECALL with given payload
+`<address>.delegatecall(bytes memory) returns (bool, bytes memory)`
+issues low-level DELEGATECALL with given payload
 
-        <address>.staticcall(bytes memory) returns (bool, bytes memory)
-        issues low-level STATICCALL
+`<address>.staticcall(bytes memory) returns (bool, bytes memory)`
+issues low-level `STATICCALL`
   
-  ## expressions and control structures
+### **expressions and control structures**
 
-    control structures
+**control structures**
 
-      if
-      else
-      while
-      do
-      for
-      break
-      continue
-      return
+- if
+- else
+- while
+- do
+- for
+- break
+- continue
+- return
 
-      usual semantics from C or javascript
+usual semantics from C or javascript
     
-      exception handling can be done with try/catch statements, only for external function and contract creation calls
+exception handling can be done with try/catch statements, only for external function and contract creation calls
 
-      errors can be created with the revert statement
+errors can be created with the revert statement
 
-      parentheses can't be ommitted for conditionals, but curly braces can in single-statement bodies
+parentheses can't be ommitted for conditionals, but curly braces can in single-statement bodies
 
-      no type conversion from non-boolean to boolean types if (1) {then...} wouldn't work as 1 is an integer, a non-boolean
+no type conversion from non-boolean to boolean types if (1) {then...} wouldn't work as 1 is an integer, a non-boolean
 
-    function calls
+**function calls**
 
-      internal
-        only functions of the same contract instance can be called internally
+**internal**  
+only functions of the same contract instance can be called internally
 
-        recursion has the effect of not clearing current memory  
+recursion has the effect of not clearing current memory  
 
-        every internal function call uses up at least one stack slot and there's only 1024 available
+every internal function call uses up at least one stack slot and there's only 1024 available
 
-      external
-        this.g(8)
-        c.g(2)
-        c is a contract instance
+**external**  
+`this.g(8)`  
+`c.g(2)`  
+`c` is a contract instance  
 
-        calling functions from other contracts, the wei sent with the call can be specified {value: 10, gas: 10000}
+calling functions from other contracts, the wei sent with the call can be specified {value: 10, gas: 10000}
     
-    function calles with named parameters
+function calls with named parameters
     
-    ommited names in function definitions
-      name of parameters and return values in the declaration can be omitted
+ommited names in function definitions
+
+name of parameters and return values in the declaration can be omitted.
     
-    creating contracts via new
-      a contract can create other contracts via new
+creating contracts via new
 
-      full code has to be known when the creating contract is compiled
+a contract can create other contracts via new
 
-      recursive creation-dependencies aren't possible
+full code has to be known when the creating contract is compiled
 
-    salted contract creations
-      when creating a contract, address of the contract is computed from the address of the creating contract 
+recursive creation-dependencies aren't possible
 
-      salt a bytes32 value the contract creation uses a different mechanism 
+**salted contract creations**
 
-      it computes the address from address of the creating contract, the given salt value, the bytecode of the created contract and constructor arguments
+when creating a contract, address of the contract is computed from the address of the creating contract 
 
-      nonce is not used if salt is used
+salt a `bytes32` value the contract creation uses a different mechanism 
 
-    order of evaluation of expressions
+it computes the address from address of the creating contract, the given salt value, the bytecode of the created contract and constructor arguments
 
-      destructuring assignments and returning multiple values
+`nonce` is not used if `salt` is used
 
-        solidity allow tuple types (list of objects of different types whose number is a constant at compile time)
+**order of evaluation of expressions**
 
-      arrays and structs
+destructuring assignments and returning multiple values
+
+solidity allow tuple types (list of objects of different types whose number is a constant at compile time)
+
+arrays and structs
     
-    scoping and declarations
-      a variable that is declared will have an initial default value whose byte representation is all zeros
+**scoping and declarations**
 
-      default values of variables are typical zero-state
+a variable that is declared will have an initial default value whose byte representation is all zeros
 
-      default of bool is false
-      default for uint or int is 0
-      statically-sized arrays and bytes1...bytes32 each element will be initialized to the default value of its type
-      dynamic-sized arrays, bytes and string, the default value is an empty array or string
-      for enum default value is the first member
+default values of variables are typical zero-state
 
-      scoping rules follow C99 
-      variables are visible from the point right after declaration until end of smallest block that contains it
+default of bool is false
 
-      variables declared in the initialization of a for-loop are only visible until the end of the for-loop
+default for uint or int is 0
+
+statically-sized arrays and bytes1...bytes32 each element will be initialized to the default value of its type
+
+dynamic-sized arrays, bytes and string, the default value is an empty array or string
+
+for enum default value is the first member
+
+scoping rules follow C99 
+
+variables are visible from the point right after declaration until end of smallest block that contains it
+
+variables declared in the initialization of a for-loop are only visible until the end of the for-loop
     
-    checked or unchecked arithmetic
+checked or unchecked arithmetic
 
-      overflow or underflow happens when the resulting value of an arithmetic operation, when executed on an unrestricted integer, falls outside the range of the result type
+overflow or underflow happens when the resulting value of an arithmetic operation, when executed on an unrestricted integer, falls outside the range of the result type
 
-      since 0.8.0 arithmetic operations rever on over and underflow by default making the use of libraries that introduce additional checks unnecessary
+since 0.8.0 arithmetic operations rever on over and underflow by default making the use of libraries that introduce additional checks unnecessary
 
-    error handling, assert, require, rever and exceptions
+**error handling, assert, require, rever and exceptions**
 
-      state-reverting exceptions handle errors
+state-reverting exceptions handle errors
 
-      when exception is in a sub-call, they bubble up, exception is rethrown unless caught in try/catch
+when exception is in a sub-call, they bubble up, exception is rethrown unless caught in try/catch
 
-      assert and require can be used to check for conditions and throw an exception if the condition is not met
+assert and require can be used to check for conditions and throw an exception if the condition is not met
 
-      assert function
-        creates an error of type Panic(uint256)
+**assert function**
+creates an error of type `Panic(uint256)`
         
-        should only be used to test internal errors and check invariants
+should only be used to test internal errors and check invariants
 
-        proper code should never create a Panic
+proper code should never create a Panic
 
-        0x00 generic compiler inserted panics
-        0x01 if calling assert with an argument that evaluates to false
-        ...etc
+0x00 generic compiler inserted panics
 
-      require function
-        creates an error without any data
-        or an error of type Error(string)
+0x01 if calling assert with an argument that evaluates to false ...etc
+
+**require function**
+creates an error without any data
+
+or an error of type Error(string)
       
-        should only be used to ensure valid conditions that can't be detected until execution time
+should only be used to ensure valid conditions that can't be detected until execution time
       
-      revert statement
-        takes a custom error as direct argument without parentheses
+**revert statement**
+takes a custom error as direct argument without parentheses
 
-        revert CustomError(arg1, arg2);
+`revert CustomError(arg1, arg2);`
       
-      revert() function
-        causes a revert without any error data
+**revert() function**
+causes a revert without any error data
   
   ## contracts
 

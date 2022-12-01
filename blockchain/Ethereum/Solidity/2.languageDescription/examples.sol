@@ -1,11 +1,14 @@
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.4.16 <0.9.0;
+
 // adjust supplied gas
-address(nameReg).call{gas: 1000000}(abi.encodeWithSignature("register(string)", "MyName"));
+// address(nameReg).call{gas: 1000000}(abi.encodeWithSignature("register(string)", "MyName"));
 
 // adjust supplied ether value
-address(nameReg).call{value: 1 ether}(abi.encodeWithSignature("register(string)", "MyName"));
+// address(nameReg).call{value: 1 ether}(abi.encodeWithSignature("register(string)", "MyName"));
 
 // combining modifiers
-address(nameReg).call{gas: 1000000, value: 1 ether}(abi.encodeWithSignature("register(string),""MyName"));
+// address(nameReg).call{gas: 1000000, value: 1 ether}(abi.encodeWithSignature("register(string),""MyName"));
 
 // enum
 
@@ -54,8 +57,8 @@ contract InfoFeed {
 
 contract Consumer {
   InfoFeed feed;
-  function setFeed(InfoFeed addr) pulic { feed = addr; }
-  function callFeed() public {feet.info{value:10, gas:800}();}
+  function setFeed(InfoFeed addr) public { feed = addr; }
+  function callFeed() public {feed.info{value:10, gas:800}();}
 }
 
 // named parameters
