@@ -395,3 +395,515 @@ watchListCopy.map(movie => (
 
 console.log(JSON.stringify(ratingsFunctional));
 
+// solution 1
+const ratings1 = watchList.map(movie => ({
+  title: movie["Title"],
+  rating: movie["imdbRating"]
+}));
+
+// solution 2
+/* 
+destructuring properties as parameters 
+*/
+const ratings2 = watchList.map(({Title: title, imdbRating: rating}) => ({title, rating}));
+
+// implement map on a prototype
+/* 
+applying Array.prototype.map() returns an array of the same length as the one it was called on.
+
+doesn't alter the original array as long as the callback doesn't
+
+map is a pure function, the output depends solely on its inputs.
+
+takes a function as its argument.
+
+write own Array.prototype.myMap() that behaves like the real one.
+
+
+*/
+
+// solution 1
+Array.prototype.myMap1 = function(callback) {
+  const newArray = [ ];
+
+  for (let i = 0; i < this.length; i++) {
+    newArray.push(callback(this[i]));
+  }
+
+  return newArray;
+};
+
+// solution 2
+Array.prototype.myMap2 = function(callback) {
+  const newArray = [];
+
+  this.forEach(a => newArray.push(callback(a)));
+
+  return newArray;
+};
+
+// use filter method to extract data from array
+/* 
+Array.prototype.filter()
+
+calls a function on each element of an array and returns a new array containing only elements that evaluate to truthy
+
+a value is passed to the Boolean() contructor to return either true or false
+
+callback function accepts three arguments
+
+1. current element being processed
+2. index of that element.
+3. array upon which the filter method was called
+*/
+
+const unfilteredUsers = [
+  {name: 'john', age: 34},
+  {name: 'amy', age: 20},
+  {name: 'camperCat', age: 10}
+];
+
+const usersUnder30 = unfilteredUsers.filter(user => user.age < 30);
+
+console.log(usersUnder30);
+
+const filteredList = watchList.filter(movie => Number(movie["imdbRating"]) >= 8.0)
+  .map(({Title: title, imdbRating: rating }) => ({
+    title,
+    rating
+  }));
+
+console.log(filteredList);
+
+// implementing the filter method on a prototype
+
+Array.prototype.myFilter = function(callback) {
+  const newArray = [];
+
+  for (let i = 0; i < this.length; i++) {
+    if (callback(this[i])) {
+      newArray.push(this[i]);
+    }
+  }
+
+  return newArray;
+}
+
+// solution 1
+Array.prototype.myFilter1 = function(callback) {
+  const newArray = [];
+
+  for (let i = 0; i < this.length; i++) {
+    if (Boolean(callback(this[i])) === true) {
+      newArray.push(this[i]);
+    }
+  }
+};
+
+// solution 2
+Array.prototype.myFilter2 = function(callback) {
+  const newArray = [];
+
+  for (const elem of this) {
+    if (callback(elem)) newArray.push(elem);
+  }
+
+  return newArray;
+};
+
+// return part of an array using the slice method
+
+/* 
+,returns copy of certain elements 
+
+1. index where to begin the slice
+2. index where to end the slice (non-exclusive)
+
+leaving arguments empty is an easy way to copy all elements of an array
+
+slice does not mutate the original array
+*/
+
+function sliceArray(anim, beginSlice, endSlice) {
+  return anim.slice(beginSlice, endSlice);
+}
+
+const inputAnim = [
+  "cat",
+  "dog",
+  "tiger",
+  "zebra",
+  "ant",
+];
+
+sliceArray(inputAnim, 1, 3);
+
+// remove elements from an array using slice instead of splice
+/* 
+splice can remove items and keep the rest of the array
+
+1. index where to start the removal
+2. number of items to remove
+
+default is to remove items through the end
+
+splice does mutate the original array
+*/
+
+function nonMutatingSplice(cities) {
+  // return cities.splice(3);
+  return cities.slice(0, 3);
+}
+
+// combine two arrays using the concat method
+
+/* 
+concatenation means to join items
+
+concat method is offered by js for strings and arrays
+
+concatenating arrays does not mutate either of input arrays.
+*/
+
+function nonMutatingConcat(original, attach) {
+  return original.concat(attach);
+}
+
+const first = [1, 2, 3];
+const second = [4, 5];
+
+nonMutatingConcat(first, second);
+
+// add elements to end using concat instead of push
+
+/* 
+push adds items to the end of the same array it is called on, mutating the source array
+
+concat merges new items to the end of the array without mutating either side.
+*/
+
+function nonMutatingPush(original, newItem) {
+  return original.concat(newItem);
+}
+
+// use reduce method to analyze data
+/* 
+Array.prototype.reduce()
+
+reduce method allows more general forms of array processing
+
+reduce iterates over each item and returns a single value
+
+callback function accepts four arguments
+
+1. accumulator (gets assigned the return value of the callback function from previous iteration)
+2. current element being processed
+3. index of that element
+4. array upon which reduce is called
+
+in addition to a callback function, reduce takes the initial value of the accumulator
+if not used, the first iteration is skipped and the second gets passed the first element of the array as the accumulator
+
+*/
+
+const someUsers = [
+  { name: 'John', age: 34 },
+  { name: 'Amy', age: 20 },
+  { name: 'camperCat', age: 10 }
+];
+
+const sumOfAges = someUsers.reduce((sum, user) => sum + user.age, 0);
+
+const usersObj = someUsers.reduce((obj, user) => {
+  obj[user.name] = user.age;
+  return obj;
+}, {});
+
+function averageRatingsNolan(array) {
+  let filteredMovies = array.filter(movie => movie['Director'] === 'Christopher Nolan')
+  .map(movie => Number(movie["imdbRating"]))
+  .reduce((sumRating, rating) => {
+    return (rating + sumRating)
+  }, 0);
+
+  return filteredMovies / array.filter(movie => movie.Director === 'Christopher Nolan')
+    .map(movie => movie.imdbRating).length;
+}
+
+console.log(averageRatingsNolan(watchList));
+
+function getRating(watchList) {
+  const nolanData = watchList
+    .reduce((data, {Director: director, imdbRating: rating}) => {
+      if (director === 'Christopher Nolan') {
+        data.count++;
+        data.sum += Number(rating);
+      }
+      return data;
+    }, {sum: 0, count: 0});
+  
+  const averageRating = nolanData.sum / nolanData.count;
+  return averageRating;
+}
+
+// use higher-order functions map, filter or reduce to solve complex problems
+
+const squareList = arr => {
+  return arr.filter(elem => elem >= 0 && elem % parseInt(elem) === 0)
+    .map(elem => Math.pow(elem, 2));
+}
+
+const squaredIntegers = squareList([-3, 4.8, 5, 3, -3.2]);
+
+console.log(squaredIntegers);
+
+console.log(parseInt(4.8));
+console.log(4.8 % 4);
+
+// solution 2 
+
+const squareList2 = arr => {
+  return arr.reduce((sqrIntegers, num) => {
+    return Number.isInteger(num) && num > 0
+      ? sqrIntegers.concat(num * num)
+      : sqrIntegers;
+  }, [])
+}
+
+// sort an array alphabetically using the sort method
+
+/* 
+sorts elements of an array according to callback function
+
+javascript default sorting method is by unicode point value
+
+best practice to provide a callback function to sort the array items.
+
+this callback function is called compare function in sorting
+
+the array elements are sorted according to the returned value from the function
+
+return value less than 0, then a will come before b
+
+return value above 0 then b will come before a
+
+
+*/
+
+function ascendingOrder(arr) {
+  return arr.sort(function(a, b) {
+    return a - b;
+  });
+}
+
+console.log(ascendingOrder([1, 5, 2,  3, 4]));
+
+function reverseAlpha(arr) {
+  return arr.sort(function(a, b) {
+    return a === b
+      ? 0
+      : a < b
+        ? 1
+        : -1;
+  });
+}
+
+console.log(reverseAlpha(['l', 'h', 'z','b','s']));
+
+function alphabeticalOrder(arr) {
+  return arr.sort((a, b) => {
+    return a === b 
+      ? 0
+      : a < b
+        ? -1
+        : 1;
+  });
+}
+
+console.log(alphabeticalOrder(['a', 'd', 'c', 'a', 'z', 'g']));
+
+// return a sorted array without changing the original array
+
+/* 
+sort does mutate the original array
+
+to avoid mutation, first concatenate an empty array to the one being sorted, as concat doesn't alter source arrays
+slice also returns a new array
+*/
+
+const globalArray = [5, 6, 3, 2, 9];
+
+function nonMutatingSort(arr) {
+  let arrCopy = arr.concat([]);
+
+  return arrCopy
+    .sort((a, b) => {
+      return a === b
+        ? 0 
+        : a < b
+          ? -1
+          : 1
+    })
+    .concat([]);
+}
+
+console.log(nonMutatingSort(globalArray));
+console.log(globalArray);
+
+// solution 1 
+
+function nonMutatingSort1(arr) {
+  return [].concat(arr).sort(function(a, b) {
+    return a - b;
+  });
+}
+
+// split a string into an array using the split method
+
+/*
+splits a string into an array of strings
+
+argument is the delimiter, a character used to break up the string or regexp
+
+delimiter == space == array of words
+delimiter == empty string == array of characters
+
+strings are immutable so this method creates an array to be able to process and mutate a string
+
+
+*/
+
+const string = 'hello world!';
+const bySpace = string.split(' ');
+const otherString = 'how9are7you2today';
+const byDigits = otherString.split(/\d/);
+
+function splitify(str) {
+  return str.split(/\W/);
+}
+
+console.log(splitify('hello world,i-am code'));
+
+// combine an array into a string using join
+
+function sentensify(str) {
+  return str.split(/\W/)
+    .join(" ");
+}
+
+console.log(sentensify("May-the-force-be-with-you"));
+
+// apply functional programming to convert strings to URL slugs
+
+function urlSlug(title) {
+  return title.toLowerCase()
+    .trim()
+    .split(/\s+/)
+    // .split(/\W/)
+    // .split(" ")
+    .join('-');
+}
+
+console.log(urlSlug(' A Mind Needs Books Like A Sword Needs A Whetstone'));
+
+// solution 2 
+
+var globalTitle = 'Winter is coming';
+
+function urlSlug2(title) {
+  return title.split(" ")
+    .filter(substr => substr !== "")
+    .join('-')
+    .toLowerCase();
+}
+
+console.log(urlSlug2(globalTitle));
+
+// use every method to evaluate a condition against every element
+
+/* 
+returns true if all elements pass an arbitrary test
+similar to chained && 
+*/
+
+const numbers = [1, 5, 8, 0, 10, 11];
+
+numbers.every(function(currentValue) {
+  return currentValue < 10;
+});
+
+function checkPositive(arr) {
+  return arr.every(elem => elem >= 0);
+}
+
+console.log(checkPositive([1, 2, 3, -4, 5]));
+
+// use some method to check if any of the elements meet a conditiion
+
+/* 
+as long as an element checks true, it all returns true
+similar to || 
+*/
+
+const someNumbers = [10, 50, 8, 220, 110, 11];
+
+console.log(someNumbers.some(function(elem) {
+  return elem < 10;
+}));
+
+function checkPositiveSome(arr) {
+  return arr.some(elem => elem >= 0);
+}
+
+// introduction to currying and partial application
+
+/* 
+the arity of a function is the number of arguments it requires
+currying a function means to convert a function of N arity into N functions of arity 1
+
+useful if arguments can't be supplied at once.
+
+saves each function call in a variable
+
+partial application is applying a few arguments to a function at the time and returning another function to apply more arguements.
+
+
+*/
+
+function uncurried(x, y) {
+  return x + y;
+}
+
+function curried(x) {
+  return function(y) {
+    return x + y;
+  }
+}
+
+const curried2 = x => y => x + y;
+
+// a call to curried, would return a function and 
+
+curried(1)(2);
+
+const funcForY = curried(1);
+console.log(funcForY(2));
+
+function impartial(x, y, z) {
+  return x + y + z;
+}
+
+const partialFn = impartial.bind(this, 1, 2);
+
+partialFn(10);
+
+function add(x) {
+  return function(y) {
+    return function (z) {
+      return x + y + z;
+    }
+  }
+}
+
+console.log(add(10)(20)(30));
+
