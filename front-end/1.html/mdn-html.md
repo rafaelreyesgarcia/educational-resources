@@ -789,57 +789,75 @@ loop the video plays again when it finishes
 `preload` buffers large files
 
 preload values
-none doesn't buffer the file
-auto buffers the media
-metadata buffers the metadata
-	poster URL of an image to be displayed before the video. Is a splash screen or advertising	screen.
 
-paragraph element (fallback content) is used to display text in case the browser doesn't support the video element
+`none` doesn't buffer the file
 
-container formats
-	define a structure in which the audio/video in the media are stored. (mp3, mp4, webm)
-	contain metadata describing the media, what codecs are used to encode the channels.
-	A webm file contains a movie that has
-video tracks (main and alternative angle)
-audio tracks (english, spanish, commentary)
-text tracks (closed captions, sutitles, commentary captions)
-	audio and video tracks are encoded with audio and video codecs 
-	codecs convert compressed audio and video into binary data and back 
-	media support is dependent on what software the user has installed
+`auto` buffers the media
 
+`metadata` buffers the metadata
 
+***poster URL*** of an image to be displayed before the video is a splash screen or advertising screen.
 
+**paragraph element** (fallback content) is used to display text in case the browser doesn't support the video element
 
+### **container formats**
 
+define a structure in which the audio/video in the media are stored. (mp3, mp4, webm)
 
+contain metadata describing the media, what codecs are used to encode the channels.
 
-Video text tracks
-	webVTT file format allows to write text files with a transcript of the words being spoken in the 	audio/video
-	contains
-string of text (cues)
-metadata time and video at which the text string is displayed
+A webm file contains a movie that has
+- video tracks (main and alternative angle)
 
-Types of cues
-	subtitles – translations of foreign material
-	captions – synchronized transcriptions of dialog or description of significant sounds
-	timed descriptions – text which should be spoken by the media player to describe important 	visuals to visually impaired users
+- audio tracks (english, spanish, commentary)
+
+- text tracks (closed captions, sutitles, commentary captions)
+
+audio and video tracks are encoded with audio and video codecs 
+
+codecs convert compressed audio and video into binary data and back 
+
+media support is dependent on what software the user has installed
+
+### **Video text tracks**
+
+webVTT file format allows to write text files with a transcript of the words being spoken in the 	audio/video
+
+contains
+- string of text (cues)
+- metadata time and video at which the text string is displayed
+
+### **Types of cues**
+
+**subtitles** – translations of foreign material
+
+**captions** – synchronized transcriptions of dialog or description of significant sounds
+
+**timed descriptions** – text which should be spoken by the media player to describe important visuals to visually impaired users
 	
-<Track> element
-	links the .vtt file to the media in html
-	Attributes 
-kind – specify what kind of cue it is (subtitles, captions, descriptions
-src – file path to the .vtt file 
-srclang – tells the browser what language the subtitles are written in
+### **`<Track>` element**
+
+links the .vtt file to the media in html
+
+Attributes 
+`kind` – specify what kind of cue it is (subtitles, captions, descriptions).
+
+`src` – file path to the .vtt file 
+
+`srclang` – tells the browser what language the subtitles are written in
 label helps readers identify the language they are searching for
-	text tracks help with SEO 
 
-	
-<audio> element
-	the audio element doesn't support width/height attributes as there's no visual component
-	doesn't support the poster attribute.
+text tracks help with SEO 
 
-Examples
+### **`<audio>` element**
 
+the audio element doesn't support width/height attributes as there's no visual component
+
+doesn't support the poster attribute.
+
+**Examples**
+
+```html
 <video>
 <video src=”video.webm” controls>
 	<p>your browser doesn't support HTML5 video, here is a <a href=”video.webm”> link to the video</a> instead.</p>
@@ -851,185 +869,253 @@ Examples
 	<source src=”test.webm” type=”video/webm”>
 	<p>your browser doesn't support HTML5 video. Here is a <a href=”test.mp4”>link to the 	video</a> instead.</p>
 </video>
+```
 
-
-
-
-
-
-other attributes
+**other attributes**
+```html
+<!-- <video> -->
 <video controls width=”400” height=”400” autoplay loop muted preload=”auto” poster=”poster.png”>
 	<source src=”test.mp4” type=”video/mp4”>
 	<source src=”test.webm” type=”video/webm”>
-	<p>your browser doesn't support HTML5 video. Here is a <a href=”test.mp4”>link to the 	video</a> instead.</p>
+	<p>your browser doesn't support HTML5 video. Here is a <a href=”test.mp4”>link to the video</a> instead.</p>
 </video>
 
-<audio>
+<!-- <audio> -->
 <audio controls>
 	<source src=”test.mp3” type=”audio/mp3”>
 	<source src=”test.ogg” type=”audio/ogg”>
 	<p>your browser doesn't support HTML5 audio. Here is a <a href=”test.mp3”> link to the audio</a> instead.</p>
 </audio>
 
-<track>
+<!-- <track> -->
 <video controls>
 	<source src=”test.mp4” type=”video/mp4”>
 	<source src=”test.webm” type=”video/webm”>
 	<track kind=”subtitles” src=”subtitles_es.vtt” srclang=”es” label=”spanish”>
 </video>
+```
 
-2.10 other embedding technologies
+## **other embedding technologies**
 
 in the past frames were useful to create websites
+
 frames are small parts of a website stored in individual html pages
-frames were embedded in a master document -  frameset
+
+frames were embedded in a master document -  **frameset**
+
 splitting the page in small chunks was more efficient for download speeds back then with slow network connections.
+
 Problems outweighed the upside of using framesets
+
 plugin technology then became popular (java applets and flash)
-<object> and <embed> elements where useful at the time that used plugin technologies
+
+`<object>` and `<embed>` elements where useful at the time that used plugin technologies
 accessibility, security, file size are main problems of plugin technology
 
-<iframe> element
-	allows other web documents into the current document 
-	incorporates third party content without having to implement your own version of it
-	security concerns are still present with iframes
-	attributes 
-	border: none
+### **`<iframe>` element**
+
+allows other web documents into the current document 
+
+incorporates third party content without having to implement your own version of it
+
+security concerns are still present with iframes
+
+attributes 
+`border: none`
 the iframe is displayed without a surrounding border
-	allowfullscreen
+
+`allowfullscreen`
 the ifram is able to be placed in full screen
-	src
+
+`src`
 contains a path to the URL of the document to be embedded
 should be set with javascript as it decreases the page load time. Important for SEO
 
-	width and height 
+`width` and `height` 
 specify the iframe width and height
-	fall back content 
-will appear if the browser doesn't support iframes
-nested inside the iframe element
-is not an attribute itself
-uses a paragraph and anchor element.
-	sandbox
+
+**fall back content**
+
+- will appear if the browser doesn't support iframes
+- nested inside the iframe element
+- is not an attribute itself
+- uses a paragraph and anchor element.
+
+`sandbox`
 requests heightened security settings
+
 container for code where the element can be used appropriately but not cause harm to the codebase
+
 unsandboxed content can execute javascript, submit forms, popup windows
+
 blank sandbox attribute is the most secure
+
 you can add permissions changing the value (allow-scripts, allow-same-origin)
 
-security concerns 
-	iframes are attack vectors for hackers that want to modify your webpage
-	they can be used to trick people into revealing sensitive information
-	clickjacking hackers embed an invisible iframe into your document to capture user's interactions
-	HTTPS reduces change that remote content has been tampered with in transit
-	HTTPS prevents embedded content from accessing your parent document and viceversa
+### **security concerns**
+
+iframes are attack vectors for hackers that want to modify your webpage
+
+they can be used to trick people into revealing sensitive information
+
+clickjacking hackers embed an invisible iframe into your document to capture user's interactions
+
+HTTPS reduces change that remote content has been tampered with in transit
+
+HTTPS prevents embedded content from accessing your parent document and viceversa
 	
-CSP content security policy
-	provides a set of HTTP headers designed to improve the security of the html document 
-	x-frame-options disable other websites from embedding your content into their websites to 	prevent clickjacking 
+### **CSP content security policy**
+
+provides a set of HTTP headers designed to improve the security of the html document 
+
+x-frame-options disable other websites from embedding your content into their websites to 	prevent clickjacking 
 	
-<embed> and <object> elements embed external content. Not used anymore 
+`<embed>` and `<object>` elements embed external content. Not used anymore.
 
-2.11 Vector Graphics
+## **Vector Graphics**
 
-raster images 
-	defined with a grid of pixels 
-	each pixel is placed and colored
-	raster formats
-Bitmap .bmp
-PNG .png
-JPEG .jpg
-GIF .gif
+**raster images**
+
+defined with a grid of pixels 
+
+each pixel is placed and colored
+
+raster formats
+- Bitmap .bmp
+- PNG .png
+- JPEG .jpg
+- GIF .gif
 	
-Vector images
-	defined by algorithms 
-	contains shape and path definitions for rendering instead of pixels
-	Vector formats
-SVG 
+**Vector images**
+
+defined by algorithms 
+
+contains shape and path definitions for rendering instead of pixels
+
+Vector formats
+- SVG 
 
 
-SVG 
-	XML based language to define vector images
-	markup language for graphics not content 
-	many more elements to define effects and shapes
-	SVG elements
-<circle> <rect> <fecolormatrix> <animate> <mask>
-	text in vector images remains accessible (benefiting SEO)
-	SVGs are suitable for styling/scripting
-	disadvantages
-	file size can grow depending on complexity of the image
-	significant processing time in the browser
-	not supported in older browsers
+### **SVG**
 
-Add SVG in <img> element
-	src – path to the svg gile
-	aspect ratio (ratio between the width and height) 
-	if no inherent aspect ratio, width and height attributes needs to be added
-	image can become a hyperlink with the anchor element by nesting it into the image element
-	svg files can be cached by the browser
-	can't be manipulated by javascript
-	inline CSS is needed inside the svg code, there's no other way to invoke css
-	srcset attribute that only recent browsers recognize
-	svg files can be used as css background images
-	svg inline svg file can be opened in a text file and pasted in the html document 
-	<svg> element is used to inline svg
-	inline svg can be styled 
-	svg inline cons
-suitable just for a single svg. Duplication is resource intensive
-extra svg code increases html size
-browser can't cache inline svg
+- XML based language to define vector images
+
+- markup language for graphics not content 
+
+- many more elements to define effects and shapes
+
+**SVG elements**
+
+`<circle> <rect> <fecolormatrix> <animate> <mask>`
+
+text in vector images remains accessible (benefiting SEO)
+
+SVGs are suitable for styling/scripting
+
+**disadvantages**
+- file size can grow depending on complexity of the image
+- significant processing time in the browser
+- not supported in older browsers
+
+### **Add SVG in `<img>` element**
+
+`src` – path to the svg gile
+
+aspect ratio (ratio between the width and height) 
+
+if no inherent aspect ratio, width and height attributes needs to be added
+
+image can become a hyperlink with the anchor element by nesting it into the image element
+
+svg files can be cached by the browser
+
+can't be manipulated by javascript
+
+inline CSS is needed inside the svg code, there's no other way to invoke css
+
+`srcset` attribute that only recent browsers recognize
+
+svg files can be used as css background images
+
+svg inline svg file can be opened in a text file and pasted in the html document 
+
+`<svg>` element is used to inline svg
+
+inline svg can be styled 
+
+**svg inline cons**
+- suitable just for a single svg. Duplication is resource intensive
+- extra svg code increases html size
+- browser can't cache inline svg
 
 examples
-<img src=”file.svg” alt=”triangle with all tree sides equal” height=”87” width=”100” />
+```html
+<img src="file.svg" alt="triangle with all tree sides equal" height="87" width="100" />
 
-<img src=”file.png” alt=”triangle with all tree sides equal” srcset=”file.svg”>
+<img src="file.png" alt="triangle with all tree sides equal" srcset="file.svg">
 
-<svg width=”300” height=”200”>
-	<rect width=”100%” height=”100%” fill=”green”>
+<svg width="300" height="200">
+	<rect width="100%" height="100%" fill="green">
 </svg>
 
 embed svg with an iframe
-<iframe scr=”file.svg” width=”500” height=”500” sandbox>
+<iframe scr="file.svg" width="500" height=”500” sandbox>
 	<img src=”file.png” alt=”triangle” />
 </iframe>
+```
 
-
-
-
-2.12 Responsive Images
+## **Responsive Images**
 
 images that work well with different screen sizes, resolutions and other characteristics
 
 art direction problem 
-	different cropped images for various layouts
+- different cropped images for various layouts
+
 resolution switching problem
-	large image isn't necessary for a small screen. Small images aren't useful for big screens. 
+- large image isn't necessary for a small screen. Small images aren't useful for big screens. 
 
 Multiple resolutions would be available to the user's browser. The browser determines the optimal resolution to load based on the screen of the user.
 
 Responsive image technologies came out because of different screen sizes (phones, tablets, desktop)
+
 CSS has better tools for responsive design than HTML 
+
 browsers load the page with html, then interpret css and javascript. Responsive design is good to implement at first.
 
-responsive html attributes 
-Sourceset srcset  
-	defines the set of images the browser can choose from and what size each image is
-	different values are divided in three
+### responsive html attributes 
+Sourceset `srcset`  
+defines the set of images the browser can choose from and what size each image is
+
+different values are divided in three
+
 image filename (file.jpg)
+
 space
+
 image's intrinsic width in pixels (480w)
+
 uses w not px. Intrinsic size is the real size of the image
 
-sizes 
+`sizes` 
 	define a set of media conditions and indicates what image size would be best for certain 	conditions
-media condition (max-width:600px) if the viewport width is 600 pixels or less
-space
-slot width (480px) then the image should fill 480 pixels 
-50vw is relative to the viewport size 480px is an absolute metric
-the last slot width will be the default when none of the media conditions are true
-the browser ignores everything after the first matching condition 
-	media conditions save bandwidth to not download file sizes bigger than needed
-	older browsers ignore this attribute and just load what's defined by src
 
+media condition (max-width:600px) if the viewport width is 600 pixels or less
+
+space
+
+slot width (480px) then the image should fill 480 pixels 
+
+50vw is relative to the viewport size 480px is an absolute metric
+
+the last slot width will be the default when none of the media conditions are true
+
+the browser ignores everything after the first matching condition 
+
+media conditions save bandwidth to not download file sizes bigger than needed
+
+older browsers ignore this attribute and just load what's defined by src
+
+```html
 <img srcset=”fairy-480.jpg 480w,
 		fairy-800.jpg 800w”
 	sizes=”(max-width: 600px) 480px,
@@ -1037,144 +1123,176 @@ the browser ignores everything after the first matching condition
 	src=”fairy-800w,jpg”
 	alt=”fairy”>
 
-
-
-
-resolution switching
-	same size, different resolution
+<!-- 
+  resolution switching 
+  same size, different resolution
 	the browser uses x-descriptors instead of sizes attribute 
+-->
+	
 <img srcset=”fairy-320w.jpg,
 		fairy-480w.jpg 1.5x,
 		fairy-640w.jpg 2x”
 	src=”fairy-640w.jpg”
 	alt=”fairy”>
-
+```
 then applying css 
 
+```css
 img {
 	width: 320px;
 }
+```
 
 sizes are not needed as the browser will serve the most appropriate from the sourceset
+
 one device pixel represents one CSS pixel
+
 if the device has double resolution (2x) then the 640.jpg will be shown
 
-art direction 
-	wanting to change the image displayed to suit different image display sizes
-	the <picture> element helps
+**art direction**
 
-<picture>
-	wrapper containing several <source> elements that provide different sources to the browser
+wanting to change the image displayed to suit different image display sizes
 
+the `<picture>` element helps
+
+`<picture>`
+wrapper containing several `<source>` elements that provide different sources to the browser
+
+```html
 <picture>
 	<source media=”(max-width: 799px)” srcset=”elva-480w.jpg”>
 	<source media=”(min-width: 800px) srcset=”elva-800.jpg”>
 	<img src=”elva-800.jpg” alt=”elva girl”>
 </picture>
+```
 
-<source> elements include a media condition. The first one that returns true is the one displayed
-if the viewport width is 799px or less, the first source element will be displayed
-if the viewport is 800px or more, the second source element will be displayed
+`<source>` elements include a media condition. The first one that returns true is the one displayed
 
-srcset attributes contain the path to the image file 
+- if the viewport width is 799px or less, the first source element will be displayed
+- if the viewport is 800px or more, the second source element will be displayed
+
+`srcset` attributes contain the path to the image file 
+
 the image element needs to be provided as it's the default image when none condition is met
+
 a fallback should be included for browsers that don't support the picture element.
 
 WebP and AVIF are new formats that maintain low file size and high quality
 
+## **HTML Tables**
 
+**Tables**
 
+structured set of data (rows and columns). Tabular data
 
-
-
-
-
-2.13 HTML Tables
-
-Tables
-	structured set of data (rows and columns). Tabular data
-	improve accessibility
+improve accessibility
 	
-Table Styling	
-	tables need styling information and a solid HTML structure
+**Table Styling**	
+
+tables need styling information and a solid HTML structure
 
 back in the day developers used tables to layout websites
-	reduce accessibility for visually impaired users
-	tag soup (involve complex markup structures so code is harder to write, maintain and debug)
-	they're not automatically responsive. 
 
-Elements
+reduce accessibility for visually impaired users
 
-<table></table>
+tag soup (involve complex markup structures so code is harder to write, maintain and debug)
 
-Table Data <td>
-	smallest container inside a table cell
-	fist row 
+they're not automatically responsive. 
+
+### **Elements**
+
+`<table></table>`
+
+**Table Data `<td>`**
+smallest container inside a table cell
+
+fist row 
 	
-Table Row <tr>
-	creates another row
-	<td> gets nested inside this element so a new row is formed
-	
-Table Headers <th>
-	special cells that go at the start of a row or column
-	define the type of data that rows or columns contain 
-	header cells are not normal cells
-	
-colspan and rowspan attributes
-	allow to span the columns and rows across multiple cells 
+**Table Row `<tr>`**
+creates another row
 
-<col> <colgroup> elements
+`<td>` gets nested inside this element so a new row is formed
+	
+**Table Headers `<th>`**
+
+special cells that go at the start of a row or column
+
+define the type of data that rows or columns contain 
+
+header cells are not normal cells
+	
+`colspan` and `rowspan` attributes
+allow to span the columns and rows across multiple cells 
+
+**`<col> <colgroup>` elements**
 	styles columns more efficiently than specifying individual colspan attributes in each <tr> <th> 	elements
 	<col> is a nested element of <colgroup> empty tag
 	<col> will define the style of the column with a style attribute 
 	to apply the same style to different columns, we use the span attribute 
-	
+
+```html
 <table>
 	<colgroup>
 		<col>
 		<col style=”background-color: yellow”>
 	</colgroup>
 
-or for both columns <col style=”background-color: yellow” span=”2”>
+<!-- or for both columns  -->
+<col style=”background-color: yellow” span=”2”>
+```
 
-2.14 Table Advance Features
+## **Table Advance Features**
 
-<caption>
-	gives your table a caption
-	nested element inside <table>
-	description of the table contents
-	caption helps impaired users to have a global idea of the table, to choose if they want to read it
-	summary attribute is also used, but deprecated by HTML5 
-	
-<thead> <tfoot> <tbody>
-	marks up a header, footer and body section for the table
-	they aren't useful for screen reader users
-	they are useful for adding CSS to the table
-	
-<thead>
-	must wrap the part of the table that is the header
-	the first row might be the header
-	table header should come after <col>/<colgroup>
-<tfoot>
-	warps the content that is the footer
-	final row with items in most cases
-<tbody>
-	wraps all other parts of the table
-	
+`<caption>`
+gives your table a caption
 
-Nesting Tables
-	nest a table inside another table
+nested element inside `<table>`
+
+description of the table contents
+
+caption helps impaired users to have a global idea of the table, to choose if they want to read it
+
+summary attribute is also used, but deprecated by HTML5 
 	
-Accessible tables
+`<thead> <tfoot> <tbody>`
+
+marks up a header, footer and body section for the table
+
+they aren't useful for screen reader users
+
+they are useful for adding CSS to the table
 	
-scope attribute 
-	can be added to the <th> element to define if it's a col (column) header or a row header
-	scope can also define colgroup  rowgroup as a header of headers 
+`<thead>`
+
+must wrap the part of the table that is the header
+
+the first row might be the header
+
+table header should come after `<col>/<colgroup>`
+
+`<tfoot>`
+warps the content that is the footer
+
+final row with items in most cases
+
+`<tbody>`
+wraps all other parts of the table
+	
+**Nesting Tables**
+nest a table inside another table
+	
+**Accessible tables**
+	
+**scope attribute**
+
+can be added to the `<th>` element to define if it's a col (column) header or a row header
+
+scope can also define colgroup  rowgroup as a header of headers 
 	
 id and header attributes 
-	can be used as an alternative to scope
-	create associations between headers and cells
-	unique id to each th element
-	headers attribute to each td element
-	for this to work, there has to be both column and row headers
+- can be used as an alternative to scope
+- create associations between headers and cells
+- unique id to each th element
+- headers attribute to each td element
+- for this to work, there has to be both column and row headers
 
