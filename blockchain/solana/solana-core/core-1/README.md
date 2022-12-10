@@ -433,13 +433,62 @@ fees are a reward to validators for their work
 
 ## **build an interaction script**
 
+build a local client with just typescript. Faster than setting up a front-end and build UI
+
+work in a single TS file and run it asynchronously 
+
+
 ### **setup local solana client**
 
 `npx create-solana-client solana-intro-client`
+
+say yes to install `create-solana-client`
+
 
 ### **setting up client script**
 
 `index.ts` import dependencies and add `initializeKeypair` function
 
+```ts
+// We're adding these
+import * as Web3 from '@solana/web3.js';
+import * as fs from 'fs';
+import dotenv from 'dotenv';
+dotenv.config();
+
+// creates a keypair if we don't have one
+
+async function initializeKeypair(connection: Web3.Connection): Promise<Web3.Keypair> {
+  if (!process.env.PRIVATE_KEY) {
+    console.log('Generating new keypair... 🗝️');
+    const signer = Web3.Keypair.generate();
+
+    console.log('Creating .env file');
+    fs.writeFileSync('.env', `PRIVATE_KEY=[${signer.secretKey.toString()}]`);
+
+    return signer;
+  }
+
+  const secret = JSON.parse(process.env.PRIVATE_KEY ?? '') as number[];
+  const secretKey = Uint8Array.from(secret);
+  const keypairFromSecret = Web3.Keypair.fromSecretKey(secretKey);
+  return keypairFromSecret;
+}
+
+async function main() {
+}
+
+main()
+  .then(() => {
+    console.log('Finished successfully');
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.log(error);
+    process.exit(1);
+  });
+```
+
 `npm start` will setup the solana client in one command
 
+- `Web3.Keypair.generate()` call writes the result to local dotenv

@@ -47,7 +47,7 @@ you need to be familiar with cURL to send API calls so avalanche created a postm
 ## postman
 
 - GUI that issues API calls in a formatted and readable manner.
-- postmant collections are a group of saved requests.
+- postman collections are a group of saved requests.
 - every request sent in postman appears under history.
 - reusing requests is convenient.
 - time-consuming to find a request in history.
@@ -66,7 +66,54 @@ you need to be familiar with cURL to send API calls so avalanche created a postm
 
 ## making calls to p-chain
 
-- avalanche folder in collections tab.
-- expand platformVM and press on POST getBalance
+- `avalanche` folder in `collections` tab
+- expand `platformVM` and press on `POST getBalance`
 - in the body of the request change address to the address you want to read.
-- 
+- body tab of the request the `address` key should have a value of `P-fuji1sj9s20adgsersxl6k0n36fc7ssr5hknaqs5d7d`
+
+## making calls to c-chain
+
+getting the base fee for the next block
+
+**base fee** transaction fee charged to perform any transaction on the blockchain
+
+- `avalanche` folder in `collections` tab
+- `EVM` folder and `POST eth_baseFee`
+- response has a `result` key with a hex value of the base fee
+
+## asset description on x-chain
+
+handles assets
+
+- `avalanche` folder `collections` tab
+- `AVM` folder `post getAssetDescription`
+- body tab, replace `{{avaxAssetId}}` with `2XZeTZrBmXv4buRyDuNj7odkpVH4x4B2fc7Jm3V4yLBp3NpQXf`
+- response a `result` key holding an object describing the asset
+- all assets have asset ids
+
+`name` name of the asset  
+`symbol` AVAX e.g  
+`denomination` number of decimal places
+
+## keystore API
+
+- every node has a built-in keystore
+
+**keystore** a store of private keys
+
+- clients create users on the keystore that act as identities when interacting with blockchains
+- a tx issued has to be signed by a private key
+- a keystore exist at the node level, so creating a user on a node exists only on that node
+
+keystore API allows to handle users private keys
+- creates
+-deletes
+- exports
+- imports
+- lists
+
+a node has significant power when managing a keystore full of users private keys. 
+
+> a keystore user should only be created on a node you operate
+
+> the keystore API is intended only for development and quick experimentation should not be used for mainnet or production environments
