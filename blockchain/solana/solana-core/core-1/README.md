@@ -500,7 +500,7 @@ main()
 - `getBalance`checks the balance, if its under 1 then we call the function
 - blockhash and block height are block identifiers used to communicate to the network that we're up to date and that these are recent transactions.
 
-### call on-chain program
+### **call on-chain program**
 
 the program we want to interact with
 
