@@ -492,3 +492,71 @@ main()
 `npm start` will setup the solana client in one command
 
 - `Web3.Keypair.generate()` call writes the result to local dotenv
+
+.gitignore .evn to not publish the private key to a git repository
+
+`airdropSolIfNeeded()` function
+
+- `getBalance`checks the balance, if its under 1 then we call the function
+- blockhash and block height are block identifiers used to communicate to the network that we're up to date and that these are recent transactions.
+
+### call on-chain program
+
+the program we want to interact with
+
+```js
+const PROGRAM_ID = new Web3.PublicKey("ChT1B39WKLS8qUrkLvFDXMhEJ4F1XZzwUNHUt4AU9aVa");
+
+const PROGRAM_DATA_PUBLIC_KEY = new Web3.PublicKey("Ah9K7dQ8EHaZqcAsgBW8w37yN2eAy3koFmUn4x3CJtod");
+```
+
+- `PROGRAM_ID` address of the program
+- `PROGRAM_DATA_PUBLIC_KEY` address of the account that stores data for the program.
+
+executable code and stateful data are stored separately on solana
+
+```js
+async function pingProgram(connection: Web3.Connection, payer: Web3.Keypair) {
+  const transaction = new Web3.Transaction()
+  const instruction = new Web3.TransactionInstruction({
+    // Instructions need 3 things 
+    
+    // 1. The public keys of all the accounts the instruction will read/write
+    keys: [
+      {
+        pubkey: PROGRAM_DATA_PUBLIC_KEY,
+        isSigner: false,
+        isWritable: true
+      }
+    ],
+    
+    // 2. The ID of the program this instruction will be sent to
+    programId: PROGRAM_ID
+    
+    // 3. Data - in this case, there's none!
+  })
+
+  transaction.add(instruction)
+  const transactionSignature = await Web3.sendAndConfirmTransaction(connection, transaction, [payer])
+
+  console.log(
+    `Transaction https://explorer.solana.com/tx/${transactionSignature}?cluster=devnet`
+    )
+}
+```
+
+- instructions is an object with three properties, the public key of all the accounts the instructions will read/write, the id of the program and the data
+
+- `keys` is an array of account metadata for each account this instruction will read from or write to.
+
+- you need to know what accounts will be read or written otherwise the instruction will be invalid as you can't interact with the program properly
+
+- this tx doesn't require a signature from data account so `isSigner` is set to false. `isWritable` is true as the account will be written to.
+
+- by explicitly defining the accounts we want to interact with, the runtime knows which txs to run in parallel
+
+```js
+// add to main()
+
+await pingProgram(connection, signer);
+```
