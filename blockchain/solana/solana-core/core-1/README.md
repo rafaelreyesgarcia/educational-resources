@@ -1,4 +1,4 @@
-# **core 1**
+# client side development
 
 ## **reading and writing data on solana**
 

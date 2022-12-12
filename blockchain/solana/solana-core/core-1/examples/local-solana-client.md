@@ -1,3 +1,4 @@
+```ts
 // step 1 -> import dependencies
 import * as Web3 from '@solana/web3.js';
 import * as fs from 'fs';
@@ -110,3 +111,4 @@ main()
         console.log(error)
         process.exit(1)
     })
+```
