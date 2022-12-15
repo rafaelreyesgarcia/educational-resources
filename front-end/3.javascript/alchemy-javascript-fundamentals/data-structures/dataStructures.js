@@ -348,3 +348,210 @@ function allUniqueSolution(numbers) {
   }, true);
 }
 
+// BUILDING DATA STRUCTURES
+
+// recursion
+
+// 1. base case
+
+function baseCase(n) {
+  if (n === 1) {
+    return 1;
+  }
+}
+
+// 2. second case
+
+function factorial2(n) {
+  if (n === 1) {
+    return 1;
+  }
+  return 2 * factorial2(1);
+}
+
+// 3. recursion
+
+function factorial(n) {
+  if (n === 1) {
+    return 1;
+  }
+  return n * factorial(n - 1);
+}
+
+console.log(factorial(5));
+
+// 4 walk
+
+function walk(node) {
+  if (node.next === undefined) {
+    return node;
+  }
+}
+
+const aNode = walk({ id: 1, next: undefined }); 
+
+console.log(aNode); // { id: 1, next: undefined }
+
+// walk recursive
+
+// 5. walk recursive
+
+function walkRecursive(node) {
+  if (node.next === undefined) {
+    return node;
+  }
+  return walkRecursive(node.next);
+}
+
+// STACKS
+
+// 1. push and pop
+// 2. overflow and underflow
+// 3. isEmpty and Peek
+
+// const { MAX_STACK_SIZE } = require('./config');
+
+const MAX_STACK_SIZE = 50;
+
+class Stack {
+  constructor() {
+    this.items = [];
+  }
+  push(item) {
+    if (this.items.length === MAX_STACK_SIZE) {
+      throw new Error('stack overflow!');
+    }
+    this.items.push(item); 
+  }
+  pop() {
+    if (this.isEmpty()) {
+      throw new Error('stack underflow!');
+    }
+    return this.items.pop();
+  }
+  isEmpty() {
+      return this.items.length === 0;
+  }
+  peek() {
+      return this.items[this.items.length - 1];
+  }
+}
+
+// 4. operations manager
+
+class OperationManager {
+  constructor() {
+    this.operations = new Stack();
+    this.undos = new Stack();
+  }
+
+  addOperation(operation) {
+    this.operations.push(operation);
+  }
+
+  undo() {
+    this.undos.push(this.operations.pop());
+    // const operation = this.operations.pop();
+    // this.undos.push(operation);
+  }
+
+  redo() {
+    this.operations.push(this.undos.pop());
+    // const operation = this.undos.pop();
+    // this.operations.push(operation);
+  }
+
+  redoAll() {
+      while(!this.undos.isEmpty()) {
+        this.redo();
+      }
+  }
+}
+
+// LINKED LISTS
+
+// 1. node
+
+class Node {
+  constructor(data) {
+    this.data = data;
+    this.next = null;
+  }
+}
+
+const node = new Node(4);
+
+console.log(node.data); // 4
+console.log(node.next); // null
+
+// 2. linked list
+// 3. add first
+// 4. add last
+
+class LinkedList {
+  constructor() {
+    this.head = null;
+  }
+  addFirst(node) {
+    node.next = this.head;
+    this.head = node;
+  }
+  addLast(node) {
+    if (!this.head) {
+      this.head = node;
+      return;
+    }
+
+    let ref = this.head;
+
+    while(ref.next) ref = ref.next;
+
+    ref.next = node;
+  }
+  indexOf(node) {
+    let id = 0;
+    let ref = this.head;
+
+    do {
+      if (ref === node) {
+        return id;
+      }
+      ref = ref.next;
+      id++;
+    } 
+    while(ref)
+  }
+  removeAt(index) {
+    if (index === 0) {
+      this.head = this.head.next;
+      return;
+    }
+    let id = 0;
+    let node = this.head;
+
+    while (id < index - 1) {
+      node = node.next;
+      id++;
+    }
+
+    node.next = node.next.next;
+  }
+}
+
+const linkedList = new LinkedList();
+
+console.log(linkedList.head); // null
+
+// PRACTICE
+
+// 1. deep retrieval
+
+// retrieve a prop that is deeply nested within objects
+// i.e. { prop: { prop: { prop: 3 }}} => 3
+function deepRetrieval(obj) {
+    if (typeof obj.prop !== 'object') {
+      return obj.prop
+    }
+    return deepRetrieval(obj.prop);
+}
+
