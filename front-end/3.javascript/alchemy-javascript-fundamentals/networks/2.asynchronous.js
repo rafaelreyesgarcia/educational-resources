@@ -97,3 +97,69 @@ const newArray = map([1,2,3], (x) => {
 });
 
 console.log(newArray); // [2,4,6]
+
+// PROMISES
+
+// 1. request order
+
+class Task {
+  constructor(order) {
+      this.order = order;
+      this.promise = new Promise((resolve, reject) => {
+          this.resolve = resolve;
+          this.reject = reject;
+      });
+  }
+}
+
+const _tasks = [];
+function _findTaskByOrder(order) {
+  return _tasks.find(x => x.order.id === order.id);
+}
+
+function makeFood(order) {
+  const task = new Task(order);
+  _tasks.push(task);
+  return task.promise;
+}
+
+function problem(order, err) {
+  _findTaskByOrder(order).reject(err);
+}
+
+function finishFood(order) {
+  _findTaskByOrder(order).resolve();
+}
+
+class Order {
+  constructor() {
+      this.isReady = false;
+  }
+  request(food) {
+      const promise = makeFood(food);
+      promise.then(() => {
+        this.isReady = true;
+      })
+      .catch((error) => {
+        this.error = error;
+      });
+  }
+}
+
+// 3. create a promise
+
+function timer() {
+  return new Promise(function(resolve, reject) {
+    resolve();
+  });
+
+}
+
+// 4 asynchronous timer
+
+// timer resolves after one second
+function asyncTimer() {
+  return new Promise(function(resolve, reject) {
+    setTimeout(resolve, 1000);
+  });
+}
