@@ -850,6 +850,7 @@ javascript will garbage collect them eventually
 
 ### **conditional rendering**
 
+conditional renders in JSX are implemented using `if` statements `&&` and `? :` operators.
 
 
 ## **ADDING INTERACTIVITY**
