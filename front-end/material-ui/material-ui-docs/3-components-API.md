@@ -1,32 +1,17 @@
 # components API
 
-## 
+## navigation
 
-### AppBar
+## bottom navigation
 
-### Avatar
+bar that allows movement between destinations in an app
 
-### Button
+if there's only 3 actions, display both icons and text.
 
-### Card
+if there's more than 4 actions, display inactive views as icons only.
 
-### Checkbox
+fixed positioning keeps bottom navigation fixed to the bottom
 
-### Chips
+perform navigation on the client only without an HTTP round-trip to the server.
 
-### Grid
-
-### IconButton
-
-### Icons
-
-### Paper
-
-### Styling
-
-### Templates
-
-### Typography
-
-
-
+`BottomNavigationAction` provides the `component` prop to handle this.
