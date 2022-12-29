@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 
 function useDataFetching(dataSource) {
-  
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   // generic names instead of tasks setTasks
@@ -12,7 +11,7 @@ function useDataFetching(dataSource) {
       try {
         // fetches the REST api
         const data = await fetch(dataSource);
-        // 
+        // returns a promise that resolves with a JSON input being parsed to a js object
         const result = await data.json();
 
         if (result) {

@@ -24,11 +24,20 @@ const Title = styled.h2`
   border-bottom: 1px solid darkGray;
 `;
 
-function Lane({ laneId, title, loading, error, tasks, onDragStart, onDragOver, onDrop }) {
+function Lane({ 
+  laneId, 
+  title, 
+  loading, 
+  error, 
+  tasks, 
+  onDragStart, 
+  onDragOver, 
+  onDrop 
+}) {
   return (
     <LaneWrapper 
-      className='Lane-wrapper'
       onDragOver={onDragOver}
+      onDrop={(e) => onDrop(e, laneId)} // onDragOver and onDrop are invoked on the div (parent)
     >
       <Title>{title}</Title>
       {loading || error ? (
@@ -40,9 +49,7 @@ function Lane({ laneId, title, loading, error, tasks, onDragStart, onDragOver, o
             id={task.id}
             title={task.title}
             body={task.body}
-            onDragStart={onDragStart}
-            onDragOver={onDragOver}
-            onDrop={(e) => onDrop(e, laneId)}
+            onDragStart={onDragStart} // ondragStart handler is invoked in Task component (child)
           />
         ))
       )}

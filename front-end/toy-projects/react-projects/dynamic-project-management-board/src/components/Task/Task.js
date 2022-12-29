@@ -28,7 +28,12 @@ const TaskWrapper = styled.div`
 `;
 */
 
-function Task ({ id, title, body, onDragStart }) {
+function Task ({ 
+  id, 
+  title, 
+  body, 
+  onDragStart 
+}) {
   return (
     <TaskWrapper
       draggable

@@ -1,7 +1,8 @@
+import { useEffect, useState} from 'react';
 import useDataFetching from '../../hooks/useDataFetching';
 import Lane from '../../components/Lane/Lane';
 import './Board.css';
-import { useEffect, useState} from 'react';
+
 
 const lanes = [
   { id: 1, title: 'Projects' },
