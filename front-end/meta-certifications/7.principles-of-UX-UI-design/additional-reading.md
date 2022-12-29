@@ -2,6 +2,8 @@
 
 ## week 1
 
+### UX
+
 **UX**
 https://maze.co/collections/ux-ui-design/what-is-ux/
 
@@ -37,3 +39,34 @@ https://www.uxforthemasses.com/scenarios-part-two/
 
 https://www.studiobinder.com/blog/storyboard-website-design/
 
+### UI
+
+https://www.coursera.org/articles/ui-design
+
+https://www.interaction-design.org/literature/topics/ui-design
+
+https://userinyerface.com/
+
+https://xd.adobe.com/ideas/process/ui-design/
+
+### UX vs UI
+
+https://www.interaction-design.org/literature/article/design-thinking-getting-started-with-empathy
+
+https://xd.adobe.com/ideas/process/ui-design/ui-vs-ux-design-understanding-similarities-and-differences/
+
+### user research
+
+https://www.usability.gov/what-and-why/user-research.html#:~:text=User%20research%20focuses%20on%20understanding,of%20design%20on%20an%20audience.%E2%80%9D
+
+### personas
+
+https://www.nngroup.com/articles/scenario-mapping-personas/
+
+https://www.usability.gov/how-to-and-tools/methods/personas.html
+
+### scenarios
+
+https://methods.18f.gov/decide/user-scenarios/
+
+https://books.google.co.uk/books/about/The_Persona_Lifecycle.html?id=wWuBbTCcsCoC
