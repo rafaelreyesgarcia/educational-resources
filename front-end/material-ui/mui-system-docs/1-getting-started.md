@@ -334,7 +334,33 @@ export default function Demo() {
 }
 ```
 
+## theme-aware properties
 
+### borders
+
+`border` only receives number as value.
+
+a solid black border is defined in pixels with the number
+
+```jsx
+<Box 
+  sx={{
+    border: 1
+  }}
+/>
+// equivalent to border: '1px solid black'
+```
+
+`borderColor` receives a string, that represents the path in `theme.palette`
+
+```jsx
+<Box 
+  sx={{
+    borderColor: 'primary.main'
+  }}
+/>
+// equivalent to borderColor: theme => theme.palette.primary.main
+```
 
 
 
