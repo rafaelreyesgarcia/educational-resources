@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { StyledEngineProvider } from '@mui/material'; // more info
 // import App from './App';
 // import Grid from '../src/grid/Grid';
-// import PricingPage from './sandbox/PricingPage';
-import Blog from './templates/blog-template/Blog';
+import PricingPage from './sandbox/PricingPage';
+// import Blog from './templates/blog-template/Blog';
 // import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -13,8 +13,8 @@ root.render(
     <StyledEngineProvider injectFirst>
       {/* <App /> */}
       {/* <Grid /> */}
-      {/* <PricingPage /> */}
-      <Blog />
+      <PricingPage />
+      {/* <Blog /> */}
     </StyledEngineProvider>
     
   </React.StrictMode>

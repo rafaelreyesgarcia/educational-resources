@@ -226,6 +226,54 @@ good for
 - background music
 - background videos
 
+# excercise: heuristic evaluation
 
+severity raiting 
 
+- s0 - violates heuristic but doesn't have a usability issue
+- s1 - cosmetic usability issues easily fixable.
+- s2 - minor usability issues might become challenging to solve
+- s3 - major usability issues occur frequently.
+- s4 - usability issues seriously impairs the use of the product.
+
+easy to fix rating
+
+- e0 - fix will require maximum effort. Solution might not be understood.
+- e1 - fix will require considerable effort. solution might not be easy but is understood.
+- e2 - fix will require a concentrated effort. solution is not difficult to implement with the proper steps.
+- e3 - single developer with minor effort can complete the fix.
+- e4 - fix is trival and easy to implement
+
+# knowledge check: heuristic evaluation
+
+1. Visibility of system status means the website informs the user of what is going on through constructive, appropriate and timely feedback. **true**
+
+Visibility of system status means the website informs the user of what is going on through constructive, appropriate and timely feedback.
+
+2. Nielsen’s heuristic number 2: Match between the system and the real world. This heuristic means concepts, words, symbols, situations or actions refer to the same thing. **false**
+
+This refers to Heuristic number 4: Consistency and Adherence to Standards.
+
+3. “Do similar items interact and behave in the same way?” fit into Heuristics number 6, Recognition rather than recall? **yes**
+
+The user does not need to recall information from one part of a dialogue to another.
+
+# knowledge check: evaluation methods
+
+1. Who wrote the 10 Principles of Good Design?
+**dieter rams**
+
+2. Accessibility enables people with disabilities to interpret, understand, navigate, interact with and contribute to the web. **true**
+
+3. Are there any guidelines that could help you design your product for accessibility? **yes**
+
+You can implement Section 508 and Web Content Accessibility Guidelines 2.0 minimum standards. These guidelines cover the significant points you need to know for your products to be accessible to all users.
+
+4. Which of the following is one of Nielsen's ten usability heuristics?
+
+**Flexibility and efficiency of use**
+
+5. Is it critical that users can use the keyboard to access all interactive elements? **yes**
+
+Some users may be unable to use a mouse and rely solely on their keyboard to navigate web pages. 
 
