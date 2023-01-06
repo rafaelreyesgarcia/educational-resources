@@ -55,3 +55,47 @@ start small and build components one at a time.
 
 construct a header component that can contain other components, button, search bar, navigation bar, etc. all being standalone units.
 
+interchangable blocks that can be assembled and reassembled
+
+**design system**
+
+set of reusable pre made design components and patterns.
+
+similar to a brand style guide.
+
+characteristics of a design system
+- design guidelines
+- design pattern library
+- UI kit 
+- process design guidelines
+
+vary from business to business.
+
+**design guidelines** can vary but always will reflect the underlying values of the brand.
+
+a pattern is the recurrence of multiple design elements.
+
+**UI Kit** is a collection of UI focused components.
+
+# knowledge check: best practices
+
+1. Why would you use a progress indicator in form design?
+- Users can go back to review the content in case they made a mistake.
+- The user can see how many more steps are left to complete on the form.
+
+2. Most websites require that a password consists of a mix of lowercase and capital letters, symbols and numbers. Should you provide clear instructions giving the user immediate feedback on their choice of password?
+**You should provide guidance for users to compile their passwords.**
+
+3. Why do you space input fields?
+- The user can see that each field is unique.
+- To implement logical grouping to make the form more understandable.
+- The user can identify the labels that refer to the input
+
+4. A component, such as a button, cannot be reused on a website or an app
+**A component is any part of your design that can be logically grouped, which is thought of as stand-alone and can be reused.**
+
+5. Can a header be considered a component? 
+
+Rather than creating the header from scratch for every page, you could construct a "header component" and reuse it. 
+
+
