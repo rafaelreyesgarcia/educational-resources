@@ -10,4 +10,4 @@ I divided the resources in 5 main categories:
 - databases
 - computer science
 
-Each category includes the material I read to learn, as well as toy projects that I built using that knowledge. 
+Each category includes the material I read to learn.
