@@ -17,3 +17,42 @@ https://www.masterclass.com/articles/how-to-make-a-moodboard-step-by-step-guide
 # user interface elements
 
 https://www.usability.gov/how-to-and-tools/methods/user-interface-elements.html
+
+# design system examples
+
+https://www.figma.com/design-systems/
+
+https://www.nngroup.com/articles/design-systems-101/
+
+https://www.uxpin.com/create-design-system-guide/recommended-resources
+
+https://medium.com/nextux/form-design-best-practices-9525c321d759
+
+https://books.google.co.za/books/about/Design_Systems.html?id=UWhMswEACAAJ&redir_esc=y
+
+# material design
+
+https://m3.material.io/
+
+https://atlassian.design/
+
+https://polaris.shopify.com/
+
+https://www.ibm.com/design/language/
+
+# form design
+
+https://medium.com/@nathanacurtis
+
+# prototyping
+
+https://www.interaction-design.org/literature/topics/prototyping
+
+https://www.nngroup.com/articles/microinteractions/
+
+# micro-animations with figma
+
+https://www.youtube.com/watch?v=0YIovQXnwBY
+
+https://www.interaction-design.org/literature/article/test-your-prototypes-how-to-gather-feedback-and-maximise-learning
+
