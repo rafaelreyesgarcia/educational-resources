@@ -1,0 +1,12 @@
+node_modules/
+
+# MAC
+.DS_Store
+
+.cache/
+dist/
+coverage/
+.vscode/
+.env
+
+
