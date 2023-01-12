@@ -68,6 +68,23 @@ for select tags `onChange` handler might not trigger so `onBlur` has to set the 
     <option key={id} value={animal}>{animal}</option>
   ))}
 </select>
-
 ```
+
+# effects
+
+how to handle asynchronous code?
+
+useEffect is disconnected from rendering
+
+schedules the function after the render happens
+
+# devtools
+
+NODE_ENV=development
+
+larger and slower developer environment than production
+
+strict mode
+
+don't use deprecated stuff
 
