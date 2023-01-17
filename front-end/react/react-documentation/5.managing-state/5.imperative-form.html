@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>imperative form</title>
+</head>
+<body>
+  <form id="form">
+    <h2>city quiz</h2>
+    <p>
+      what city is located on two continents?
+    </p>
+    <textarea id="textarea" cols="30" rows="10"></textarea>
+    <br />
+    <button id="button">submit</button>
+    <p id="loading" style="display:none">loading...</p>
+    <p id="error" style="display:none; color: red;"></p>
+  </form>
+  <h1 id="success" style="display: none;">
+    that's right!
+  </h1>
+
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: sans-serif; margin: 20px; padding: 0; }
+  </style>
+
+  <script>
+
+    function hide(el) {
+      el.style.display = 'none';
+    }
+
+    function show(el) {
+      el.style.display = ''; // goes to default either inline or block
+    }
+
+    function enable(el) {
+      el.disabled = false;
+    }
+
+    function diable(el) {
+      el.disabled = true;
+    }
+
+    function handleTextareaChange() {
+      if (textarea.value.length === 0) {
+        disable(button);
+      } else {
+        enable(button);
+      }
+    }
+
+    function submitForm(answer) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (answer.toLowerCase() == 'istanbul') {
+            resolve();
+          } else {
+            reject(new Error('good guess but wrong asnwer try again...'));
+          }
+        }, 1500);
+      });
+    }
+ 
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      disable(textarea);
+      disable(button);
+      show(loadingMessage);
+      hide(errorMessage);
+      try {
+        await submitForm(textarea.value);
+        show(successMessage);
+        hide(form);
+      } catch (err) {
+        show(errorMessage);
+        errorMessage.textContent = err.message;
+      } finally {
+        hide(loadingMessage);
+        enable(textarea);
+        enable(button);
+      }
+    }
+
+    let form = document.getElementById('form');
+    let textarea = document.getElementById('textarea');
+    let button = document.getElementById('button');
+    let loadingMessage = document.getElementById('loading');
+    let errorMessage = document.getElementById('error');
+    let successMessage = document.getElementById('success');
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>plan profile editor</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { 
+      font-family: sans-serif; 
+      margin: 20px; 
+      padding: 0;
+    }
+    label {
+      display: block;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <form id="form">
+    <label>
+      First Name: 
+      <b id="firstName">Jane</b>
+      <input 
+        type="text"
+        id="firstNameInput"
+        value="Jane"
+        style="display: none;"
+      >
+    </label>
+    <label>
+      Last Name: 
+      <b id="lastName">Jacobs</b>
+      <input 
+        type="text"
+        id="lastNameInput"
+        value="Jacobs"
+        style="display: none;"
+      >
+    </label>
+    <button type="submit" id="editButton">Edit Profile</button>
+    <p><i id="greeting">Hello, Jane Jacobs!</i></p>
+  </form>
+
+  <script>
+    function hide(el) {
+      el.style.display = 'none';
+    }
+
+    function show(el) {
+      el.style.display = '';
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      if (editButton.textContent === 'Edit Profile') {
+        editButton.textContent = 'Save Profile';
+        hide(firstName);
+        hide(lastName);
+        show(firstNameInput);
+        show(lastNameInput);
+      } else {
+        editButton.textContent = 'Edit Profile';
+        hide(firstNameInput);
+        hide(lastNameInput);
+        show(firstName);
+        show(lastName);
+      }
+    }
+
+    function handleFirstName(e) {
+      firstName.textContent = firstNameInput.value;
+      greeting.textContent = (`
+        Hello ${e.target.value} ${lastNameInput.value}!
+      `);
+      console.log(greeting);
+    }
+
+    function handleLastName(e) {
+      lastName.textContent = lastNameInput.value;
+      greeting.textContent = (`
+        Hello ${firstNameInput.value} ${e.target.value}!
+      `)
+    }
+
+    let form = document.getElementById('form');
+    let editButton = document.getElementById('editButton');
+    let firstName = document.getElementById('firstName');
+    let firstNameInput = document.getElementById('firstNameInput');
+    let lastName = document.getElementById('lastName');
+    let lastNameInput = document.getElementById('lastNameInput');
+    let greeting = document.getElementById('greeting');
+
+    form.onsubmit = handleFormSubmit;
+    firstNameInput.oninput = handleFirstName;
+    lastNameInput.oninput = handleLastName;
+    
+  </script>
+</body>
+</html>
