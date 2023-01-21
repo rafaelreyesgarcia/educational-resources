@@ -296,3 +296,52 @@ Users should enjoy using your product, and you should keep them engaged and exci
 
 It’s a two-dimensional representation of the interface concerned with the placement and hierarchy of content and functionalities offered.
 
+# module quiz
+
+1. How can you add some information about your current commit while using git commit command?
+
+-m
+
+2. What are the benefits of using a version control system like git?
+
+- Enables easy collaboration with team members
+- Helps to keep a record of all changes made to a project
+- Allows multiple people to work on the same project without overwriting each other's changes
+
+3. After you have saved and committed the changes, you can push them to GitHub using
+
+The git push command
+
+4. Which of the followings are not the purpose of create-react-app?
+
+- To test React components (you need a testing tool)
+- Add react to an existing project (you can do so manually by installing the React library and setting up the necessary configurations.)
+- Build and deploy the current react app from source (you can use the provided build scripts to bundle your app and prepare it for deployment.)
+
+5. What's the importance of the node_modules folder for a React app built using the create-react-app npm package?
+
+- It is used by the npm or yarn package manager to save all the dependencies of your current project
+
+6. To create a nice, smooth animation in Figma, you can use the Clever animate option
+
+**false**
+
+7. Which of the following is the purpose of a wireframe?
+
+To create a basic structure for each screen in the design before things like branding, colors and images are considered
+
+8. Which of the following tools can be used to create a new react project?
+
+- yarn
+- npx
+- create-react-app
+
+9. To host a react project, you need to upload the content of the src directory in your web hosting space
+
+**false** The src directory contains the source code of your project which cannot run directly if you upload it on your web hosting space. You need to build it first using the build scripts that come with the create-react-app command and then upload the build version of your project.
+
+10. Which of the following items are part of the UX design process
+
+- empathize
+- ideation
+
