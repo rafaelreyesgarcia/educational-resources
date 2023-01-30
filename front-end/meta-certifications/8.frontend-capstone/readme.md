@@ -224,3 +224,419 @@ The curly braces within the JSX code are used to insert JavaScript expressions a
 
 # week 3
 
+## table booking system
+
+### customer table bookings
+
+three major concepts in react
+- state management
+- forms
+- writing unit tests
+
+components and state are inextricably linked.
+
+controlled components a form can be controlled using state.
+
+uncontrolled components are controlled by underlying DOM.
+
+`useRef` is needed for uncontrolled components.
+
+### recap: state in react
+
+state is what makes react apps interactive.
+
+state is an object, `useState` hook controls it.
+
+```jsx
+import React, { useState } from "react"; // 1. object destructuring
+import { TaskList } from "./components/TaskList";
+
+export default function App() {
+  const [tasks, setTasks] = useState([ // 2. array destructuring to set state and stateFunction
+    { id: 1, task: "Go shopping", done: true },
+    { id: 2, task: "Wash dishes", done: false },
+  ]); // 3. an array of objects is set as initial state
+
+  return (
+    <TaskList tasks={tasks} /> // 4. passes state data as props from parent to child
+  )
+}
+```
+
+the array of object is passed into the `TaskList` component and the component accepts `props.tasks` to be able to access the parent state.
+
+1. React is imported and useState is a method of the react object so `{ useState }` imports the method as its own to not need `React.useState` everytime.
+
+2. the returned value of `useState` is always an array so array destructuring is used to defined the names for the two elements in the array.
+
+> object destructuring can only be done using the exact property key (name) of the source object. Array members can be destructured using any name.
+
+many APIs return arrays of objects when dealing with data fetching.
+
+### recap: forms
+
+forms don't work like other DOM elements.
+
+form elements keep their own state in regular HTML.
+
+```html
+<form>
+  <label>
+    Number of guests:
+    <input type="number" name="guests" />
+  </label>
+  <button type="Submit">Submit</button>
+</form>
+```
+
+default behavior of an HTML form is to open a new page after clicking on submit button, like anchor tags.
+
+`preventDefault` method on an event object instance stops default behavior.
+
+**controlled** components let react take control over a form's state.
+
+**uncontrolled** components let the DOM control the state of components, there's no need of event handlers for state updates, instead `refs` are used to obtain needed form element's values straight from the DOM.
+
+uncontrolled components can help integrate react to other front-end libraries.
+
+### recap: unit testing
+
+there's 3 main approaches to test the code of an app or site
+- unit testing
+- automated testing
+- integration testing
+
+unit testing focuses on testing specific react components.
+
+simple counter app
+
+```jsx
+import React from "react";
+export default function App() {
+  const [number, setNumber] = React.useState(1);
+  function increment() {
+    setNumber((prevNumber) => prevNumber + 1);
+  }
+  return (
+    <>
+      <h1 data-test-id="currentNumber"> {number} </h1> 
+      <button data-testid="add-one" onClick={increment}>
+          Add one 
+      </button>
+    </>
+  );
+}
+```
+
+how to write a unit test for this app
+
+```jsx
+// App.test.js
+import { render, fireEvent, screen } from "@testing-library/react";
+import App from "./App";
+
+test("Adds one", () => {
+  // render the App component
+  render(<App />);
+
+  // save the heading in a variable
+  const heading = screen.getByTestId("currentNumber");
+
+  // save the button in a variable
+  const btn = screen.getByTestId("addOne");
+
+  // click the btn
+  fireEvent.click(btn);
+
+  // test assumption
+  expect(heading).toHaveTextContent("2");
+});
+```
+
+`npm test` or `npm run test` will run the test.
+
+best practices
+- avoid including implementation details.
+- work with DOM nodes.
+- resemble software usage.
+- keep maintainability in mind.
+
+### knowledge check: table booking system
+
+1. What is the purpose of the useState hook in React?
+
+The useState hook allows you to manage the component's state by declaring a state variable and a setter function for updating the state.
+
+2. What is missing from the code below?
+```jsx
+import { useState } from "react";
+
+export default function App() {
+  const [restaurantName, setRestaurantName] = useState();
+  return <h1>{restaurantName}</h1>;
+}
+```
+
+The useState hook requires an initial value to be passed as an argument in order to properly bind a value to the state of a component. Without an initial value, the state variable `restaurantName` will be undefined and the component will not render correctly.
+
+3. Controlled components keep their internal state in the DOM
+
+**false**
+
+Uncontrolled components keep their state in the DOM, but not controlled components
+
+4. What is unit testing in React?
+A type of testing that ensures that individual units of code are working as intended.
+
+5. What is the main difference between the `useState` and `useReducer` hooks in React?
+
+The useState hook is used for simple state updates, while the useReducer hook is used for more complex state updates that involve reducing the current state and an action to a new state.
+
+### additional resources
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+
+https://beta.reactjs.org/learn/passing-props-to-a-component#step-2-read-props-inside-the-child-component
+
+https://beta.reactjs.org/learn/passing-props-to-a-component#step-2-read-props-inside-the-child-component
+
+https://beta.reactjs.org/learn/passing-props-to-a-component#step-2-read-props-inside-the-child-component
+
+https://reactjs.org/docs/hooks-rules.html
+
+https://reactjs.org/docs/hooks-reference.html#usereducer
+
+https://beta.reactjs.org/apis/react/useRef#useref
+
+https://beta.reactjs.org/learn/passing-props-to-a-component#step-2-read-props-inside-the-child-component
+
+## interacting with API
+
+### querying a table booking API
+
+asynchronous functions aren't handled by javascript at all, they are delegated to other built-in browser functionalities and accepts the results of that work.
+
+the `fetch` method is often referred to as a facade function. This method returns a promise.
+
+it uses the XHR API or XML HTTP request API.
+
+a promise is an object that might get fulfilled later.
+
+3 states of a promise
+- pending
+- fulfilled (the engine is free to execute all methods that were given to it)
+- rejected
+
+fetching data is a side effect so it requires the use of `useEffect` hook.
+
+to update state either `useState` or `useReducer` works.
+
+### recap: querying APIs
+
+JSON is the most popular data transfer format.
+
+the JSON data exists somewhere on the web at a specific URL.
+
+`fetch` is a popular method to retrieve tthird party data.
+
+a side effect is anything that happens outside of react itself
+- `console()`
+- `document.title`
+- `fetch()`
+
+### connecting bookings page to API
+
+set up API library in index.html
+
+the API has 2 functions
+- `fetchAPI(date)` accepts a data as a parameter and returns an array of available reservation times
+- `submitAPI(formData)` accepts the booking form data as parameter and will return true if the data was successfully submitted.
+
+### knowledge check: interacting with the API
+
+1. Why should you never call hooks inside a nested function in react?
+
+Hooks must be called at the top level of a function component, and not inside a nested function. This is because hooks rely on the order in which they are called to determine the state of a component. If hooks are called inside a nested function, the order in which they are called may not be consistent, leading to unexpected behavior.
+
+2. The fetch function should be used inside the componentDidMount lifecycle method or useEffect hook.
+
+**true**
+
+The componentDidMount lifecycle method or the useEffect hook is the perfect place to use fetch calls to ensure the component doesn’t render before the external API data is received to avoid issues with the component not rendering correctly or with missing data being displayed.
+
+3. When you receive a HTTP response using the fetch() API, how do you parse the data into a JavaScript object?
+
+You should use the json() method of the response object to parse the data as a JSON object.
+
+4. Which of the following statements are true?
+
+- You can load local JSON files in your React project
+
+5. JSON is...
+
+A file format and a data exchange format.
+
+### additional resources
+
+https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+https://www.redhat.com/en/topics/api/what-is-a-rest-api
+
+https://reactjs.org/docs/faq-ajax.html
+
+https://reactjs.org/docs/testing-recipes.html
+
+## improving the experience
+
+### recap: form validation
+
+process of checking user input in a form is complete and accurate before it is submitted to the server.
+
+typically done using javascript on the client.
+
+server-side validation is when the user completes and submits the form with necessary information, the form data is sent to the server for form validation after submitting the form. The user receives a confirmation or error message when the server responds.
+
+client-side validation are alerts that appear when user enters data into form fields before submitting to the server.
+
+### accesibility
+
+The four major elements to concentrate on while developing an accessible website are outlined in the WCAG (Web Content Accessibility Guidelines)and standards. These are published by the World Wide Web Consortium's (W3C) Web Accessibility Initiative (WAI).
+
+**Perceivable**
+
+The information and content on your website must be perceived, understood and known by visitors. Users who are blind or have impaired vision frequently use screen-reader software, transforming a written text into synthesized speech or braille letters. Remember that perceiving doesn't necessarily mean seeing with one's eyes.
+
+**Operable**
+
+The use of operable websites is possible without interfering in any way with the user. Every feature of the website's functionality must be accessible to all users, including page navigation, link selection from a menu and the ability to play and pause audio and video. In general, the most usable websites are plain, uncomplicated and devoid of any unnecessary functionality that can obstruct users with disabilities and limits.
+
+**Understandable**
+
+Visitors should be able to quickly understand all your website's material, including its textual and graphic design content. Verbose, jumbled language is complex for your average visitor to understand and restricts access for those with cognitive issues and impairments and visitors who do not speak the primary language of your website. This idea also applies to the organization of your website. Your website's navigation should be easily accessible to users on most, if not all, of your pages, and it should be organized logically.
+
+**Robust**
+
+All visitors to your website, including those who use assistive technology like screen readers should readily understand and consume the material.
+
+### recap: UX UI
+
+**Dieter Rams**
+
+For many years, German industrial designer Dieter Rams oversaw the creation of Braun's consumer goods. About 50 years ago, he created the 10 principles of good design, commonly referred to as the ten commandments, to address the question, Is my design a good design? These ideas continue to be relevant today.
+
+**Ben Shneiderman**
+
+Shneiderman teaches computer science at the University of Maryland Human-Computer Interaction Lab in College Park. In human-computer interaction, he undertakes fundamental research, creating innovative concepts, procedures and tools, including the direct manipulation of interface and the eight golden rules of interface design.
+
+**Jakob Nielson**
+
+User advocate Jakob Nielsen is the principal of the Nielsen Norman Group, which he co-founded with Dr. Donald A. Norman (former VP of research at Apple Computer). Dr. Nielsen founded the discount usability engineering movement for quick and affordable UI changes and devised the 10 usability heuristics. Jakob Nielsen's heuristics were developed based on work together with Rolf Molich in 1990 and are probably the most-used usability heuristics for UI design.
+
+### knowledge check: improving the experience
+
+1. What is a heuristics evaluation?
+
+A heuristics evaluation examines and assesses the usability of a particular project.
+
+2. Which of the following people are notable for making various product and UI design recommendations?
+
+**Jakob Nielsen**
+
+Jakob Nielsen founded the "discount usability engineering" movement for quick and affordable UI changes and devised 10 usability heuristics. His heuristics are probably the most-used usability heuristics for UI design.
+
+**Dieter Rams**
+
+Dieter Rams is a German industrial designer who created the 10 principles of good design, commonly referred to as the ten commandments.
+
+3. There are four core principles of accessibility upon which WCAG (Web Content Accessibility Guidelines) has been built.
+
+- **understandable** this means that users must be able to comprehend both the information and how the user interface works.
+- **operable** Users must be able to use the user interface and navigation.
+- **perceivable** Users need to be able to perceive the information presented to them and user interface components through sight, hearing or touch.
+- **robust** This means that a wide range of user tools, including assistive technologies, can reliably understand your material.
+
+4. What is the term for the technical procedure where information is checked to determine if the data entered by the user is accurate?
+
+Validation is the technical procedure where information is checked to see if the data entered by the user is accurate.
+
+5. In client-side validation, the form data is validated in the browser
+
+**true** The form data is validated on the client side using various HTML attributes and JavaScript.
+
+### module quiz: project functionality
+
+1. purpose of following code:
+
+```jsx
+import { useState, useEffect } from "react";
+function Example() {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    document.title = `You clicked ${count} times`;
+  });
+  return (
+    <div>
+      {" "}
+      <p>You clicked {count} times</p>{" "}
+      <button onClick={() => setCount(count + 1)}>Click me</button>{" "}
+    </div>
+  );
+}
+```
+
+- useState is used to add state to a functional component.
+- useState is used to set the initial state of the component.
+
+2. What is the benefit of useState over useReducer?
+
+The useState hook is more performant than useReducer because it does not require the overhead of creating a new dispatch function on every render.
+
+3. Why do you use the useEffect hook in a react project?
+
+- The useEffect can also be used to clean up effects before the component unmounts or re-renders, such as canceling an HTTP request or removing an event listener.
+- The useEffect hook is often used to perform side effects after a component renders, such as making an HTTP request or updating the document title.
+- The useEffect is triggered when the component mounts or updates, allowing it to perform side effects based on the current state or props of the component.
+- The useEffect hook can be triggered when a prop changes, allowing it to perform side effects based on the updated prop value.
+
+4. True or false. Uncontrolled components are components that do not maintain their own state.
+**false**
+
+Uncontrolled components are components that do not maintain their own state and rely on an external source for their state, such as a form element or a parent component. In contrast, controlled components maintain their own state and control their own behavior and rendering.
+
+5. Which of the following are common uses of JSON in a React project?
+- To declare dependencies in package.json
+- To send and receive data to/from a REST API
+
+6. What will be output if the following HTTP request fails?
+
+```jsx
+fetch('https://example.com/api/data')
+ .then(response => console.log("Success"))
+```
+There is no catch function defined for the resulting promise, therefore, nothing will be output.
+
+7. What is the benefit of unit testing in React?
+
+- By catching regressions early in the development process, unit testing can help prevent issues from cascading and becoming more difficult to fix later on.
+- Unit testing helps ensure that individual components work as expected by testing their behavior and output under different conditions.
+- By testing individual components in isolation, unit testing allows for easier debugging and maintenance because it can help identify issues more quickly and specifically.
+
+8. `/Make Your Reservation/?`
+
+This code a RegExp object literal, because it is enclosed in / delimiters.
+
+9. True or false. “Operable” is one of four core principles of accessibility upon which WCAG (Web Content Accessibility Guidelines) has been built.
+
+"Operable" is one of the four core principles of accessibility, along with "Perceivable," "Understandable," and "Robust." It refers to the requirement that users must be able to use the user interface and navigation in a way that is accessible to them. This includes providing keyboard accessibility for users who cannot use a mouse and ensuring that the user interface does not create barriers to accessing content or functionality.
+
+10. Can you use arrow functions to update the state of a component?
+
+### additional reading
+
+https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
+
+https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA
+
+https://reactjs.org/docs/accessibility.html
+
+https://www.nngroup.com/articles/web-form-design/
