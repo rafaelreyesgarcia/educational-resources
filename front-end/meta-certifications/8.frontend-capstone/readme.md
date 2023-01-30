@@ -640,3 +640,58 @@ https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA
 https://reactjs.org/docs/accessibility.html
 
 https://www.nngroup.com/articles/web-form-design/
+
+# week 4
+
+## final graded quiz
+
+1. Which of the following are HTML Inline Elements?
+- `<input>`
+- `<span>`
+
+2. What is required by JavaScript when creating a function declaration?
+
+The function name
+
+3. Which of the following options can you use to clone a GitHub repository?
+- You can download a GitHub repository as a ZIP file.
+- You can clone a GitHub repository with the GitHub Desktop app.
+- You can use the git clone command in the Git terminal.
+
+4. Which of these options are considered best practices for form design?
+
+When possible, use a single-column web form layout. This is especially important when creating long multi-step forms. Single-column layouts are more straightforward for visitors to follow, understand, complete and submit than forms with multiple columns.
+
+Inline form validation is a procedure that checks a visitor's information in real time as they fill out the form. The error message displays below or inside the form field, alerting the visitor to their mistake and allowing them to quickly correct it and move on to the next question.
+
+5. When designing a website using CSS grid, what code can you use to design three columns where the second column uses twice the space as the other two?
+
+`grid-template-columns: 1fr 2fr 1fr;`
+
+6. What is the very first step when creating a wireframe in Figma?
+
+Gather requirements
+
+7. Which command is used to create a local copy of a remote Git repository?
+
+`git clone`
+
+8. Which of the following is not a valid Open Graph meta tag?
+
+There is no og:keywords tag in the Open Graph protocol. The og:keywords tag is not a valid Open Graph tag.
+
+9. React has at least one component known as the `root` component.
+
+10. Which of the following hooks is most appropriate for tracking complex application state in React?
+
+`useReducer`
+
+11. It is essential to provide a unique key for each list item when rendering a list in React.
+
+In React, it is important to provide a unique key prop for each element in a list to help React identify which elements have changed, been added or been removed. Without a key, React will not be able to efficiently update the list and may cause performance issues or unexpected behavior.
+
+12. CSS grids are created using the grid-gap property
+
+**false**
+
+The grid-gap property is used to specify the amount of space between the rows and columns of a grid, but it is not used to create the grid itself. To create a grid using CSS grid, you should use the display property with a value of grid and set the grid-template-columns and grid-template-rows properties to specify the number and size of the columns and rows.
