@@ -38,7 +38,7 @@ let complexArray = [
 
 // access array's contents using bracket notation
 
-/* 
+/*
 each item has an index
 javascript arrays are zero-indexed
 */
@@ -98,11 +98,11 @@ console.log(popShift(["challenge", "is", "not", "complete"]));
 
 // remove items using splice()
 
-/* 
+/*
 splice removes any number of consecutive elements from any point in the array
 can take up to 3 parameters
 2 parameters are integers representing the indices or positions
-start 
+start
   index where to begin removing elements
 amount
   how many elements to delete

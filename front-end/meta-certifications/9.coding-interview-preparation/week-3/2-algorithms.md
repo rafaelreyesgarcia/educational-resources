@@ -100,3 +100,13 @@ recursive solutions can reduce the amount of code
 
 easier to read than iterative solutions
 
+# dynamic programming
+
+memorization and dynamic programming.
+
+dynamic programming solves problems by breaking them into smaller problems.
+
+solutions are stored in a data structure to use later.
+
+if subproblems have to be computed again, you can lookup, search the answer in constant time `O(1)`
+
