@@ -100,5 +100,35 @@ find an object in a JSON array by using `findIndex`
 - pathnames allow HTTP method to provide more than one function
 - pathnames are parsed from the URL
 
+# knowledge check
+
+1. Which of the following is a feature of REST?
+
+2. In Node.js, the callback function of the server takes which two arguments?
+
+request and response
+
+request is for the client process to send information to the server and response is for the server to send information back to the client.
+
+3. Which of the following use cases would be a good case for using the GET method in REST?
 
 
+Retrieving a list of property names
+
+GET is suited for getting read only access for existing resource
+
+4. Which of the following Node.js functions parse all the name and value pairs in the calling URL?
+
+the parse function in the module url
+
+the parse function in the url module also parse the path name of the request
+
+5. The HTTP method used to call the backend server can be determined using which of these?
+
+req.method
+
+remember that the request object is for the client to send information to the server
+
+6. Which part of the URL used to call the backend server differentiates the intention of a REST method (e.g. POST)?
+
+the pathname
