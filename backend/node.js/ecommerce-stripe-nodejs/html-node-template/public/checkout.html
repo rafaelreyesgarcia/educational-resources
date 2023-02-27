@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Buy cool new product</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <section>
+      <div class="product">
+        <img src="./images/product.avif" alt="The cover of Stubborn Attachments" />
+        <div class="product__description">
+          <h3>Stubborn Attachments</h3>
+          <h5>$20.00</h5>
+        </div>
+        <div class="product__quantity">
+          <button id="minus-button" class="toggle-button">-</button>
+          <span id="quantity">1</span>
+          <button id="plus-button" class="toggle-button">+</button>
+        </div>
+      </div>
+      <form action="/create-checkout-session" method="POST">
+        <button type="submit" id="checkout-button">Checkout</button>
+      </form>
+    </section>
+    <script>
+      var stripe = Stripe('pk_test_51Mg8ltJGQd1m2NvfXHGfqSAXPKr42HDjjYB1RZ3olL54QLz7DcRaUkLIBTABVF295TfGRyHm8gdrkJW2ivZ7hyWB00H782gcRR');
+      var checkoutButton = document.getElementById('checkout-button');
+      var plusButton = document.getElementById('plus-button');
+      var minusButton = document.getElementById('minus-button');
+      var quantity = document.getElementById('quantity');
+
+      checkoutButton.addEventListener('click', function() {
+        var itemQuantity = document.getElementById('quantity').innerHTML;
+        const data = { quantity: itemQuantity}
+        fetch('/create-checkout-session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(session) {
+            return stripe.redirectToCheckout({sessionId: session.id})
+          })
+          .then(function(result) {
+            if(result.error) {
+              alert(result.error.message);
+            }
+          })
+          .catch(function(error) {
+            console.log('Error:', error);
+          })
+      });
+
+      minusButton.addEventListener('click', function() {
+        var quantityElement = document.getElementById('quantity');
+        var quantity = quantityElement.innerHTML;
+        if (quantity == 0) {
+          console.log('there\'s no items in the cart');
+          return;
+        }
+        quantity--;
+        document.getElementById('quantity').innerHTML = quantity;
+
+        if (quantity == 0) {
+          minusButton.classList.add('button-disabled');
+          // minusButton.disabled = true;
+          return;
+        }
+      })
+
+      plusButton.addEventListener('click', function() {
+        var quantityElement = document.getElementById('quantity');
+        var quantity = quantityElement.innerHTML;
+        quantity++;
+        if (quantity == 1) {
+          minusButton.classList.remove('button-disabled');
+        }
+        document.getElementById('quantity').innerHTML = quantity;
+      })
+    </script>
+  </body>
+</html>

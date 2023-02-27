@@ -2,17 +2,34 @@
 const stripe = require('stripe')('sk_test_51Mg8ltJGQd1m2Nvf84uE8xIIhYEYWmmd4Hbd3PvBMSjNMT3sbySQE3fEx8VXuV6lbJwA5wNW34dAtd8zVhe5hd30004qc2jZDz');
 const express = require('express');
 const app = express();
-app.use(express.static('public'));
+app.use(express.static('.'));
+
+app.use(
+  express.json({
+    verify: function (req, res, buf) {
+      if (req.originalUrl.startsWith('/webhook')) {
+        req.rawBody = buf.toString();
+      }
+    }
+  })
+);
 
 const YOUR_DOMAIN = 'http://localhost:4242';
 
 app.post('/create-checkout-session', async (req, res) => {
+
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
-        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-        price: '{{PRICE_ID}}',
-        quantity: 1,
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'product',
+            images: ['./public/images/product.avif']
+          },
+          unit_amount: 950,
+        },
+        quantity: req.body.quantity,
       },
     ],
     mode: 'payment',

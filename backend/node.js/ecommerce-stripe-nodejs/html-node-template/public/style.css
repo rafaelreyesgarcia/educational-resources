@@ -21,12 +21,25 @@ section {
 }
 .product {
   display: flex;
+  justify-content: space-between;
 }
-.description {
+
+.product__description {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+
+.product__quantity {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-button {
+  padding-inline: 1rem;
+  margin-inline: 1rem;
+}
+
 p {
   font-style: normal;
   font-weight: 500;
@@ -77,4 +90,7 @@ button {
 }
 button:hover {
   opacity: 0.8;
+}
+.button-disabled {
+  background-color: grey;
 }
