@@ -28,3 +28,11 @@ https://iq.opengenus.org/time-complexity-of-selection-sort/
 
 https://www.commonlounge.com/quick-sort-video-tutorial-pseudo-code-and-in-place-sorting-608c5c7284b148eb9d550e6166303142/
 
+# algorithms
+
+https://networkx.org/documentation/stable/reference/algorithms/index.html
+
+https://algodaily.com/lessons/understanding-space-complexity
+
+https://web.mit.edu/6.031/www/fa20/classes/16-recursive-data-types/
+
