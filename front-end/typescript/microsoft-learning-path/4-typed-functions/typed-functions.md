@@ -150,6 +150,8 @@ rest parameters are useful when you don't know how many arguments a function wil
 
 boundless number of optional parameters.
 
+`...` ellipsis tells the compiler to build an array with the arguments passed and assign a a the name to use it in the function.
+
 ```ts
 let addAllNumbers = (firstNumber: number, ...restOfNumbers: number[]): number => {
   let total: number =  firstNumber;
@@ -162,6 +164,9 @@ let addAllNumbers = (firstNumber: number, ...restOfNumbers: number[]): number =>
   return total;
 }
 
+addAllNumbers(1, 2, 3, 4, 5, 6, 7);  // returns 28
+addAllNumbers(2);                    // returns 2
+addAllNumbers(2, 3, "three");        // flags error due to data type at design time, returns 5
 ```
 
 ## deconstructed object parameters
@@ -185,5 +190,67 @@ displayMessage({sender: 'Rafael', text: 'hello there!'});
 
 # exercise with parameters
 
+deconstructed object parameters
 
+> function parameters are **positional**, msut be passed in the order in which they're defined.
+
+positional parameters can make code less readable (multiple optional parameters or same data type)
+
+object destructuring enables named
+
+## required parameters
+
+if a function expects a number of arguments and receives less, the missing parameter becomes undefined, making computations return `NaN`
+
+if a function expects a number of arguments and receives more, the extra parameters are ignored
+
+## optional parameters
+
+position of the optional matters. Only the last expected parameter can be optional
+
+# define function types
+
+you can define a function type using a type alias or an interface, both work the same.
+
+interfaces are good to extend the function type
+
+type alias better to use with unions or tuples
+
+## function type inference
+
+when defining a function, names of function parameters don't need to match names in function type
+
+names are ignored when checking function type compatibility
+
+optional to leave off parameter types and return type as typescript can infer types from the function type definition
+
+```ts
+let addNumbers: Calculator = (x: number, y: number): number => x + y;
+let addNumbers: Calculator = (number1: number, number2: number): number => number1 + number2;
+let addNumbers: Calculator = (num1, num2) => num1 + num2;
+```
+
+# knowledge check
+
+1. What is a difference between function parameters in TypeScript and function parameters in JavaScript?
+
+TypeScript parameters are required by default, but can be made optional. JavaScript parameters are always optional.
+
+2. What is a common use for an anonymous function?
+
+When you need to assign a function expression to a variable.
+
+An anonymous function is commonly used to assign a function expression to a variable, or to pass a function to another function.
+
+3. How should you define a function type if you need to extend it?
+
+Define it with an interface.
+
+One reason to use an interface over a type alias is that interfaces can be extended whereas a type alias cannot.
+
+# additional resources
+
+https://www.typescriptlang.org/docs/handbook/functions.html
+
+https://www.typescriptlang.org/docs/handbook/interfaces.html
 
