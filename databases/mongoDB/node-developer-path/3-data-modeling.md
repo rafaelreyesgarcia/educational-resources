@@ -194,7 +194,167 @@ large documents and unbounded documents are schema anti-patterns
 
 embeded is ideal for one-to-many and many-to-many
 
+overview
++ single query to retrieve data
++ single operation to update/delete data
+- data duplication
+- large documents
+
 # referencing data in documents
+
+storing related data in a single document.
+
+storing related data in separate documents (or collections).
+
+references ensure its clear collections are related.
+
+> save `_id` field of one document in another document as a link between the two
+
+**references** can be called **linking** or **data normalization**.
+
+reference avoids duplication of data
+
+result in smaller documents.
+
+referencing requires querying from multiple documents so extra resources are needed potentially impacting performance.
+
+overview
++ no duplication
++ smaller documents
+- need to join data from multiple documents
+
+# scaling a data model
+
+the query pattern (how to access data) needs to align with the data model (how you store your data)
+
+this allows optimum efficiency of
+- query result times
+- memory usage
+- CPU usage
+- storage
+
+unbounded documents grow indefinitely, this can happen while embedding documents
+
+problems arise when arrays storing documents grow larger
+
+the document will get larger and take more space in memory
+
+impact in write performance as one embeded object is rewritten, the entire parent document is updated into data storage
+
+difficult to perform pagination, all objects have to be retrieved and filtered in the application.
+
+max document size of 16MB
+
+in this situation, referencing becomes useful as its more manageable and organized to have different data stored separately, breaking it up into multiple collections and use references to link frequently accessed data together
+
+avoid
+- above size limit 16MB
+- poor query performance
+- poor write performance
+- too much memory usage
+
+## quiz answers
+
+- Unbounded documents caused by embedding will eventually run into storage problems by exceeding the maximum document size of 16 MB.
+
+- Embedding data will make the document larger and impact write performance. As more data is added to each document, the entire document is rewritten into MongoDB data storage.
+
+- To prevent unbounded document sizes that may result from embedding, you can break up your data into multiple collecitons and use references to keep frequently accessed data together.
+
+- Data that is accessed together should be stored together. How you model your data depends entirely on your particular application's data access patterns. You want to structure your data to match the ways that your application queries and updates it.
+
+# atlas tools for schema help
+
+- schema anti-patterns
+- mongoDB tools in atlas
+- data explorer
+- performance advisor
+
+schema design patterns help you *plan* *organize* and *model* data
+
+schema anti-patterns produce
+- sub-optimal performance
+- non-scalable solutions
+
+most common anti-patterns
+- massive arrays
+- massive number of collections
+- bloated documents
+- unnecessary indexes
+- queries without indexes
+- data accessed together but stored in different collections
+
+data explorer and performance advisor are atlas tools.
+
+## data explorer
+
+available with free tier
+
+storage size, logical data size, total documents, indexes total size of a collection
+
+indexes tab
+
+schema anti-pattern highlights issues in the collection.
+
+drop index option removes an unused index
+
+## performance advisor
+
+M10 + tiers
+
+analyzes most active collections
+
+tells which indexes are redundant
+
+index recommendation, unnecessary indexes and provide ways to improve schema
+
+## quiz
+
+1. Which tab in Data Explorer shows ways to improve your schemas?
+
+The Schema Anti-Patterns tab highlights any issues in the collection and provides details to resolve them. You can improve your schema by resolving the anti-patterns that are shown.
+
+2. What is the minimum Atlas Cluster tier that you must have to use the Performance Advisor tool?
+
+The Performance Advisor tool is available in M10+ cluster tiers.
+
+# conclusion
+
+- purpose of data modeling
+- types of relationships among data
+- embedded vs referenced documents
+- effects of sizes (documents, collections, databases)
+- tools for schema management
+
+# additional reading
+
+https://www.mongodb.com/docs/manual/core/data-modeling-introduction/?_ga=2.228114586.604663874.1677704641-1031816687.1677704641
+
+https://www.mongodb.com/developer/products/mongodb/schema-design-anti-pattern-separating-data/?_ga=2.228114586.604663874.1677704641-1031816687.1677704641
+
+https://www.mongodb.com/docs/manual/core/data-model-design/?_ga=2.228114586.604663874.1677704641-1031816687.1677704641
+
+https://www.mongodb.com/docs/v4.2/applications/data-models-relationships/?_ga=2.228114586.604663874.1677704641-1031816687.1677704641
+
+https://www.mongodb.com/basics/embedded-mongodb?_ga=2.228114586.604663874.1677704641-1031816687.1677704641
+
+https://www.mongodb.com/developer/products/mongodb/mongodb-schema-design-best-practices/?_ga=2.228114586.604663874.1677704641-1031816687.1677704641
+
+https://www.mongodb.com/docs/manual/core/data-model-design/?_ga=2.228114586.604663874.1677704641-1031816687.1677704641
+
+https://www.mongodb.com/docs/v4.2/applications/data-models-relationships/?_ga=2.228114586.604663874.1677704641-1031816687.1677704641
+
+https://www.mongodb.com/basics/embedded-mongodb?_ga=2.227483930.604663874.1677704641-1031816687.1677704641
+
+https://www.mongodb.com/docs/manual/tutorial/model-embedded-one-to-one-relationships-between-documents/?_ga=2.227483930.604663874.1677704641-1031816687.1677704641
+
+https://www.mongodb.com/docs/manual/tutorial/model-embedded-one-to-many-relationships-between-documents/?_ga=2.227483930.604663874.1677704641-1031816687.1677704641
+
+https://www.mongodb.com/docs/manual/core/data-model-design/?&_ga=2.227483930.604663874.1677704641-1031816687.1677704641#std-label-data-modeling-referencing
+
+https://www.mongodb.com/blog/post/performance-best-practices-mongodb-data-modeling-and-memory-sizing?_ga=2.227483930.604663874.1677704641-1031816687.1677704641
+
+https://www.mongodb.com/developer/products/mongodb/schema-design-anti-pattern-summary/?_ga=2.227483930.604663874.1677704641-1031816687.1677704641
 
 
 
