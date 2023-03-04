@@ -1,5 +1,6 @@
 const {MongoClient} = require('mongodb');
-const uri = 'mongodb+srv://rafael:rafael@myatlasclusteredu.m63aaer.mongodb.net/?retryWrites=true&w=majority';
+require('dotenv').config();
+const uri = process.env.ATLAS_URI;
 const client = new MongoClient(uri);
 
 const listDatabases = async (client) => {

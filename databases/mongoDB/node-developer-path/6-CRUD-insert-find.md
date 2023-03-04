@@ -322,9 +322,45 @@ db.routes.find({
     { $or: [{ "airline.name": "American Airlines" }, { airplane: 320 }] },
   ]
 })
+
+db.sales.find({ couponUsed: true,  purchaseMethod: "Online", "customer.age": { $lte: 25 } })
+
+db.sales.find({
+  $or: [
+    // Add new expressions separated by a comma:
+  ],
+})
+
+db.sales.find({
+  $or: [{ "items.name": "pens" }, { "items.tags": "writing" }],
+})
 ```
 
+# conclusion
 
+$gt $gte $lte $lt - comparison operators
+
+$and $or - logical operators
+
+operators can make queries more specific, accurate and performant.
+
+# additional resources
+
+https://docs.mongodb.com/manual/reference/method/db.collection.insertOne/?_ga=2.264619144.604663874.1677704641-1031816687.1677704641
+
+https://docs.mongodb.com/manual/reference/method/db.collection.insertMany/?_ga=2.264619144.604663874.1677704641-1031816687.1677704641
+
+https://docs.mongodb.com/manual/reference/method/db.collection.find/?_ga=2.264619144.604663874.1677704641-1031816687.1677704641
+
+https://docs.mongodb.com/manual/reference/operator/query/in/?_ga=2.264619144.604663874.1677704641-1031816687.1677704641
+
+https://docs.mongodb.com/manual/reference/operator/query-comparison/?_ga=2.264619144.604663874.1677704641-1031816687.1677704641
+
+https://docs.mongodb.com/manual/reference/operator/query/elemMatch/?_ga=2.264619144.604663874.1677704641-1031816687.1677704641
+
+https://docs.mongodb.com/manual/tutorial/query-array-of-documents/?&_ga=2.264619144.604663874.1677704641-1031816687.1677704641#combination-of-elements-satisfies-the-criteria
+
+https://docs.mongodb.com/manual/reference/operator/query-logical/?_ga=2.264619144.604663874.1677704641-1031816687.1677704641
 
 
 

@@ -1,8 +1,9 @@
 // Require MongoDB language driver
 const { MongoClient } = require("mongodb")
+require('dotenv').config();
 
 // Set the value of uri to your Atlas connection string.
-const uri = 'mongodb+srv://myAtlasDBUser:myatlas-001@myatlasclusteredu.m63aaer.mongodb.net'
+const uri = process.env.ATLAS_URI_SECOND;
 
 // Create the MongoClient instance
 const client = new MongoClient(uri)
