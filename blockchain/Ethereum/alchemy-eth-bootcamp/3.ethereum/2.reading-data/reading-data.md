@@ -126,6 +126,36 @@ params : [
 ]
 ```
 
+# batch transactions
+
+`id` property in JSON-RPC requests is used to identify a request in a batch.
+
+making several remote procedure calls can be done at once and receive responses for each one. `id` defines which response corresponds to which request.
+
+```js
+const request1 = {
+  jsonrpc: '2.0',
+  id: 1,
+  method: 'eth_blockNumber',
+}
+
+const request2 = {
+  jsonrpc: '2.0',
+  id: 2,
+  method: 'net_version'
+}
+
+const response = await axios.post(url, [request1, request2]);
+
+console.log(response.data);
+/*
+  [
+    { id: 1, jsonrpc: '2.0', result: '0x0' },
+    { id: 2, jsonrpc: '2.0', result: '0xb1a2bc2ec50000' }
+  ]
+*/
+```
+
 # ethereum nodes
 
 ethereum nodes maintain integrity of the network and its data.
