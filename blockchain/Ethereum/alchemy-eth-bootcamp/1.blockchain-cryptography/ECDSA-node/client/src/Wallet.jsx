@@ -4,6 +4,7 @@ import { hexToBytes, toHex, utf8ToBytes } from 'ethereum-cryptography/utils';
 import { keccak256 } from 'ethereum-cryptography/keccak';
 
 function Wallet({ address, setAddress, balance, setBalance, privateKey, setPrivateKey }) {
+
   async function onChange(evt) {
     const privateKey = evt.target.value;
     setPrivateKey(privateKey);
