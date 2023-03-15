@@ -152,7 +152,7 @@ const sendTx = async () => {
         {session}
       )
       console.log(
-        `${updateSenderResults.matchedCount} document(s) matched the filter, updated ${updateSenderResults.modifiedCount} document(s)`
+        `${updateSenderResults.matchedCount} document(s) matched the filter, updated ${updateSenderResults.modifiedCount} document(s) for the sender account.`
       )
       // step 2: update account receiver balance by incrementing balance by tx_amount
       const updateReceiverResults = await accounts.updateOne(
@@ -161,7 +161,7 @@ const sendTx = async () => {
         {session}
       )
       console.log(
-        `${updateReceiverResults.matchedCount} document(s) matched the filter, updated ${updateReceiverResults.modifiedCount} document(s)`
+        `${updateReceiverResults.matchedCount} document(s) matched the filter, updated ${updateReceiverResults.modifiedCount} document(s) for the receiver account.`
       )
       // step 3: insert the transfer document in the transfers collection'
       const transfer = {
@@ -173,7 +173,7 @@ const sendTx = async () => {
 
       const insertTransferResults = await transfers.insertOne(transfer, {session})
       console.log(
-        `sucessfully inserted ${insertTransferResults.insertedId} into the transfers collection`
+        `sucessfully inserted ${insertTransferResults.insertedId} into the transfers collection.`
       )
       // step 4: update transfers_complete field for the sender account
       const updateSenderTransferResults = await accounts.updateOne(
@@ -182,7 +182,7 @@ const sendTx = async () => {
         {session}
       )
       console.log(
-        `${updateSenderTransferResults.matchedCount} document(s) matched in the transfers collection, updated sender`
+        `${updateSenderTransferResults.matchedCount} document(s) matched in the transfers collection, updated ${updateSenderTransferResults.modifiedCount} document(s) for the sender account.`
       )
       // step 5: update transfers_complete for receiver
       const updateReceiverTransferResults = await accounts.updateOne(
@@ -191,15 +191,15 @@ const sendTx = async () => {
         {session}
       )
       console.log(
-        `${updateReceiverTransferResults.matchedCount} document(s) matched in the transfers collection, updated receiver`
+        `${updateReceiverTransferResults.matchedCount} document(s) matched in the transfers collection, updated ${updateReceiverTransferResults} document(s) for the receiver account.`
       )
 
       console.log('committing transaction...')
     })
     if (transactionResults) {
-      console.log('the reservation was successfully created')
+      console.log('the reservation was successfully created.')
     } else {
-      console.log('the transaction was intentionally aborted')
+      console.log('the transaction was intentionally aborted.')
     }
   } catch (err) {
     console.log(`transaction aborted: ${err}`)

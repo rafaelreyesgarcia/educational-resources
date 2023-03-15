@@ -83,3 +83,35 @@ transfer an item to a shopping cart
 > If one of the operations fails, the operations that did not fail will not be committed. The entire transaction will be canceled, and no operations will be committed.
 
 > Transactions in MongoDB follow ACID principles. atomicity, consistency, isolation, and durability
+
+# conclusion
+
+- BSON documents
+- CRUD operations (create, read, update, delete)
+- multi-document txs
+- operations should be ACID compliant
+
+additional
+- node driver methods
+- aggregation
+
+CRUD methods
+- Insert documents by using insertOne() and insertMany().
+- Query documents by using findOne() and find().
+- Delete documents by using deleteOne() and deleteMany().
+
+# additional reading
+
+https://www.mongodb.com/docs/manual/core/document/?&_ga=2.1817521.1211689507.1678384418-1031816687.1677704641#documents
+
+https://www.mongodb.com/basics/bson?_ga=2.1817521.1211689507.1678384418-1031816687.1677704641
+
+https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/write-operations/insert/?_ga=2.1817521.1211689507.1678384418-1031816687.1677704641
+
+https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/read-operations/retrieve/?_ga=2.1817521.1211689507.1678384418-1031816687.1677704641
+
+https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/write-operations/change-a-document/?_ga=2.1817521.1211689507.1678384418-1031816687.1677704641
+
+https://www.mongodb.com/docs/drivers/node/current/fundamentals/crud/write-operations/delete/?_ga=2.1817521.1211689507.1678384418-1031816687.1677704641
+
+https://www.mongodb.com/docs/drivers/node/current/fundamentals/transactions/?_ga=2.1817521.1211689507.1678384418-1031816687.1677704641
