@@ -12,3 +12,17 @@ function _transfer(
     _balances[from] = fromBalance - amount;
   }
 }
+
+contract Faucet {
+
+  // event ExampleEvent(uint _exampleArgument);
+  event Withdrawal(address _recipient);
+
+  event Sample(uint, bool); 
+
+  function withdraw() external {
+    msg.sender.transfer(1 ether);
+    emit Withdrawal(msg.sender);
+  }
+
+}

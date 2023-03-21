@@ -1,20 +1,13 @@
 pragma solidity 0.8.4;
 
-contract VendingMachine {
-  uint numSodas = 100;
-  mapping(address => uint) public sodasPurchased;
-
-  mapping(address => uint) public balanceOf;
-  mapping(address => bool) public hasVoted;
-  mapping(uint => bool) public isMember;
-  mapping(string => uint) public userZipCode;
+contract Mappings {
   // an address is mapped to a mapping that maps an uint to a bool
   mapping(address => mapping(uint => bool)) public votesPerProposal;
-  mapping(address => uint) public score;
 
-  function numSodasPerUser(address _userAddress) public returns(uint) {
-    return sodasPurchased[_userAddress];
-  }
+  // soda vending machine
+
+  uint numSodas = 100;
+  mapping(address => uint) public sodasPurchased;
 
   function purchaseSoda() public {
     require(numSodas > 1, 'sodas must be in stock!');
@@ -22,18 +15,30 @@ contract VendingMachine {
     numSodas--;
   }
 
+  function numSodasPerUser(address _userAddress) public returns(uint) {
+    return sodasPurchased[_userAddress];
+  }
+
+  // game
+
+  mapping(address => uint) public score;
+
   function addPoint() external {
     score[msg.sender]++;
   }
 
   mapping(address => bool) students;
 
-  // mapping value lookup
+  // mapping value lookup O(1)
   function isStudent(address addr) external view returns(bool) {
     return students[addr];
   }
 
-  // array value lookup, array iteration
+  function removeStudent(address addr) external {
+    students[addr] = false;
+  }
+
+  // array value lookup, array iteration O(n)
   address[] studentsArray;
 
   function isStudent(address addr) external view returns (bool) {
@@ -43,10 +48,6 @@ contract VendingMachine {
       }
       return false;
     }
-  }
-
-  function removeStudent(address addr) external {
-    students[addr] = false;
   }
 
   // map structs
@@ -82,5 +83,10 @@ contract VendingMachine {
   function registerVote(uint _id, bool _choice) external {
     voteToAddressChoice[_id][msg.sender] = _choice;
   }
+
+  mapping(address => uint) public balanceOf;
+  mapping(address => bool) public hasVoted;
+  mapping(uint => bool) public isMember;
+  mapping(string => uint) public userZipCode;
 
 }
