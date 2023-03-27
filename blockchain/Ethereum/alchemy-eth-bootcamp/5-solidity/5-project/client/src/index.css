@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap');
+
+body {
+  background-color: #eee;
+  display: flex;
+  font-family: 'Muli', sans-serif;
+}
+
+h1 {
+  margin: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+label {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-inline: 20px;
+  padding-block: 10px;
+}
+
+input[type="text"], input[type="number"] {
+  padding: 6px;
+  font-size: 18px;
+}
+
+.contract, .existing-contracts {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.button {
+  background-color: #f58427;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 20px;
+  align-self: center;
+  padding: 9px 25px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.existing-contracts ul {
+  padding: 10px;
+  margin: 20px;
+  background: #eee;
+}
+
+.existing-contracts ul > li {
+  list-style-type: none;
+  display: flex;
+  margin: 10px;
+  justify-content: space-between;
+  gap: 20px;
+}
