@@ -1,0 +1,29 @@
+{
+	"components": [
+		{
+			"components": [
+				{
+					"internalType": "string",
+					"name": "name",
+					"type": "string"
+				},
+				{
+					"internalType": "bool",
+					"name": "isProfessional",
+					"type": "bool"
+				}
+			],
+			"internalType": "struct Contract.Sport",
+			"name": "favoriteSport",
+			"type": "tuple"
+		},
+		{
+			"internalType": "string",
+			"name": "name",
+			"type": "string"
+		}
+	],
+	"internalType": "struct Contract.Person",
+	"name": "",
+	"type": "tuple"
+}

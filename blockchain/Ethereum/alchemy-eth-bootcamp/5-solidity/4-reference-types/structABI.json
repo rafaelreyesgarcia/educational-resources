@@ -1,0 +1,32 @@
+[
+	{
+		"inputs": [],
+		"name": "getHero",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "enum Contract.Directions",
+						"name": "facing",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "health",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "inAir",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct Contract.Hero",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	}
+]
