@@ -112,6 +112,8 @@ executeTransaction within confirmTransaction
 
 # sending calldata
 
+sending calldata allows to run more complex logic
+
 add `bytes data` variable as last member of `Transaction` struct to store calldata sent to destination
 
 accept bytes argument in `submitTransaction` as well as `addTransaction`
