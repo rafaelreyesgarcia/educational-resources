@@ -60,3 +60,43 @@ an address is 20 bytes (40 hexadecimal characters)
 
 32 bytes is a 64 hexadecimal characters
 
+# 4 get logs
+
+`eth_getLogs` endpoint is part of the JSON-RPC standard
+
+allows clients to retrieve a list of log entries that match a defined filter criteria
+
+a smart contract emits an event => generates a log entry
+
+a filter object defines criteria for the log entries to be retrieved
+
+can include fiels like contract address, topics, fromBlock, toBlock
+
+https://docs.alchemy.com/reference/eth-getlogs
+
+each log has a `data` property of type string with concatenated values of non-indexed arguments
+
+each non-indexed argument is padded to 32 bytes,
+
+toBlock, fromBlock and topics are provided to the params 
+
+add `address` for contract
+
+dai contract address `0x6b175474e89094c44da98b954eedeac495271d0f`
+
+# 5 transfers API
+
+alchemy transfers API makes it easy to fetch historical transaction data for any address.
+
+fast and efficient alternative to scanning the entire blockchain
+
+return the total number of ERC20 transfers that an address has made between `fromBlock` and `toBlock`
+
+easy with `getAssetTransfers` method
+
+https://docs.alchemy.com/reference/alchemy-getassettransfers
+
+`fromAddress` 0x28c6c06298d514db089934071355e5743bf21d60
+
+`category` erc20
+
