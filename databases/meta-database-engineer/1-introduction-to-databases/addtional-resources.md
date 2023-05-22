@@ -37,3 +37,19 @@ https://www.tutorialspoint.com/sql/index.htm
 https://www.javatpoint.com/sql-tutorial
 
 https://www.w3schools.com/sql
+
+# week 4
+
+https://www.prisma.io/dataguide/intro/intro-to-schemas
+
+https://www.lucidchart.com/pages/database-diagram/database-schema
+
+https://www.educative.io/blog/what-are-database-schemas-examples
+
+https://www.ibm.com/cloud/learn/database-schema
+
+https://opentextbc.ca/dbdesign01/chapter/chapter-12-normalization/
+
+https://www.databasestar.com/database-normalization/
+
+https://www.bbc.co.uk/bitesize/guides/zc93tv4/revision/2
