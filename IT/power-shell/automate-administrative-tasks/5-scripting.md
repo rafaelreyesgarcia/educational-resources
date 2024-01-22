@@ -144,3 +144,196 @@ run the script
 
 # parameters
 
+select options, send input to scripts
+
+declare a parameter `Param()` can be separated with commas
+
+```ps1
+# File.ps1
+Param(
+    $Path
+)
+New-Item $Path 
+Write-Host "File $Path was created"
+```
+
+call a script with a parameter providing name and value
+
+```ps1
+./File.ps1 -Path './newfile.txt'
+# File ./newfile.txt was created.
+./File.ps1 -Path './anotherfile.txt'
+# File ./anotherfile.txt was created.
+```
+
+how to define parameters
+- are they mandatory?
+- what values are allowed?
+- does it accept more than one type of value?
+- can the parameter rely on a default?
+- can you further improve UX?
+
+parameters are optional by default
+
+`If/Else` construct checks value of parameter and executes 
+
+```ps1
+Param(
+    $Path
+)
+If (-Not $Path -eq '') {
+    New-Item $Path
+    Write-Host "File created at $path"
+} Else {
+    Write-Error "Path can't be empty"
+}
+```
+
+`Parameter[]` decorator
+
+```ps1
+Param(
+    [Parameter(Mandatory)]
+    $Path
+)
+New-Item $Path
+Write-Host "File created at $Path"
+```
+
+improve decorator with a message
+
+```ps1
+[Parameter(Mandatory, HelpMessage = "please provide a valid path")]
+```
+
+assign a type to the parameter
+
+```ps1
+Param(
+    [string]$Path
+)
+```
+
+# parameter excercise
+
+```bash
+mkdir app
+cd app
+touch index.html app.js
+cd ..
+
+# start a powershell shell
+pwsh
+
+# create a backup script
+touch backup.ps1
+code backup.ps1
+
+```
+
+```ps1
+# edit backup script
+$date = Get-Date -format "yyyy-MM-dd"
+Compress-Archive -Path './app' -CompressionLevel 'fastest' -DestinationPath "./backup-$date"
+Write-Host "Created backup at $('./backup-' + $date + '.zip')"
+```
+
+invoke `Compress-Archive` with parameters
+- `Path` directory where to compress
+- `CompressionLevel` how much to compress files
+- `DestinationPath` path where files will be compressed
+
+run the script
+
+```ps1
+./backup.ps1
+```
+
+add parameters to script to enable configuration of locations of source files and resulting zip
+
+```ps1
+# have default values
+Param(
+    [string]$Path = './app',
+    [string]$DestinationPath = './'
+)
+```
+
+```bash
+# rename app directory
+mv app webapp
+
+# remove current backup
+rm backup-<`YYYY-MM-DD`>.zip
+```
+
+```ps1
+# input a path
+./backup.ps1 -Path './webapp'
+```
+
+# flow control
+
+describes the flow of code and how you can control it
+
+code can run
+- all statements
+- only some
+- repeat statements until a condition is met
+
+flow-control constructs
+- sanitize input ensure parameters hold values so the script works as intended
+- control execution flow decide how to run code
+- iterate over data examine items in an array and perform an operation for each one
+
+manage input and execution flow
+- if
+- elseif
+- else
+
+`if` determines if an expression is true or false
+
+```ps1
+If (expression) {
+    # statement
+}
+```
+
+boolean parameters `$true` and `$false`
+
+`-le` less or equal
+
+```ps1
+$Value = 3
+If ($Value -le 0) {
+    Write-Host "is negative"
+}
+```
+
+If runs when the condition is met.else runs when the condition isn't met.
+
+```ps1
+$value = 3
+If ($value -le 0) {
+    Write-Host "is negative"
+} else {
+    Write-Host "is positive"
+}
+```
+
+`ElseIf` is meant to be used with `If` like a secondary if
+
+```ps1
+# possible values minor, adult, senior citizen
+$Status = 'minor'
+If ($Status -eq 'minor') {
+    Write-Host $false
+} ElseIf ($Status -eq 'adult') {
+    Write-Host $True
+} else {
+    Write-Host $False
+}
+```
+
+# flow control excercise
+
